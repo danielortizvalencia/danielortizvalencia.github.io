@@ -182,6 +182,19 @@ a.entry-title:hover { text-decoration: underline; }
   padding: .12rem .5rem; border-radius: 999px; margin-bottom: .5rem;
 }
 
+/* ---------- Experience rows (role, not project) ---------- */
+.xp { display: grid; grid-template-columns: 92px 1fr; gap: 1rem; padding: .2rem 0 1.6rem; align-items: start; }
+.xp-when { font-size: var(--text-sm); font-weight: 700; color: var(--orange-deep); white-space: nowrap; padding-top: .15rem; }
+.xp-role { font-size: var(--text-lg); font-weight: 700; letter-spacing: -0.01em; }
+.xp-org { font-weight: 500; color: var(--ink-faint); }
+.xp-points { list-style: none; margin: .6rem 0 0; padding: 0; }
+.xp-points li { position: relative; padding-left: 1rem; font-size: var(--text-sm); color: var(--ink-soft); line-height: 1.7; margin-bottom: .3rem; }
+.xp-points li::before { content: ""; position: absolute; left: 0; top: .72em; width: 5px; height: 5px; border-radius: 50%; background: var(--orange-soft); }
+
+.sub-head { font-size: var(--text-base); font-weight: 700; color: var(--ink); margin: 1.6rem 0 .5rem; padding-top: 1.4rem; border-top: 1px solid var(--line); }
+.section-note a { color: var(--orange-deep); border-bottom: 1px solid var(--orange-soft); }
+.section-note a:hover { border-color: var(--orange); }
+
 /* ---------- Secondary work (engineering / Formula Student) ---------- */
 .side-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
 .side-card {

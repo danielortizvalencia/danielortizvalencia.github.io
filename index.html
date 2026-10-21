@@ -50,9 +50,8 @@
       <div class="intro-contact">danielortval at gmail dot com</div>
 
       <div class="intro-bio">
-        <p>I am a final-year Computer Engineering undergraduate at Colorado State University, applying to graduate programs in robotics and machine learning. I work on autonomy: how a robot turns raw sensing into a decision, and what happens when the learned part of that pipeline fails.</p>
-        <p>Most of my research so far is on the Formula Student Driverless Simulator. I built the perception stack that fuses LiDAR with a camera to follow a cone-delimited track, then tried to replace the hand-written controller with a learned policy and documented the ways that went wrong. I also contribute to robot teleoperation work, on a WebXR system that drives a bimanual arm through differential inverse kinematics.</p>
-        <p>Before the research, I founded Colorado State's first Formula SAE Electric program and designed its 324V battery system. I started undergraduate physics at Universidad de Nariño at 16 before moving to the United States to continue in engineering.</p>
+        <p>Final-year Computer Engineering undergraduate at Colorado State University, applying to graduate programs in robotics and machine learning. I work on robot learning and autonomy, and on what happens when the learned part of a system fails.</p>
+        <p>Before the research I founded Colorado State's first Formula SAE Electric program and designed its 324V battery system.</p>
       </div>
 
       <div class="intro-links">
@@ -77,7 +76,7 @@
         <span class="entry-title entry-title--plain">TicketBank: location-targeted noise search for frozen diffusion policies</span>
         <div class="entry-authors"><span class="me">Daniel Ortiz Valencia</span></div>
         <div class="entry-venue">Under review, 2026</div>
-        <p class="entry-blurb">A frozen diffusion or flow-matching policy is normally run with one fixed noise sample reused everywhere, a "golden ticket". I test whether the best sample actually depends on where the objects start, and whether a bank of samples chosen per start state beats a single one at an equal episode budget. On a Franka checkpoint the pre-registered bank wins by 25.8 and 20.8 points on two of four checkpoints and ties on the rest. On robomimic Can at scale, 68,000 episodes, it beats a shuffled-bank control by 3.8 points but not the best single ticket. On Transport the early advantage did not survive compute matching: given the same budget the baseline search reaches 59.7% against the bank's 37.8%, which retired that claim. Every confirmatory run is pre-registered with a frozen script and fresh seeds, and nulls are reported alongside the wins.</p>
+        <p class="entry-blurb">A frozen diffusion policy normally reuses one noise sample everywhere. I test whether the best sample depends on where the objects start. Pre-registered gains of 25.8 and 20.8 points on two Franka checkpoints, nothing significant on the other two, and on Transport the early advantage did not survive compute matching.</p>
       </div>
     </article>
 
@@ -90,7 +89,20 @@
         <span class="entry-title entry-title--plain">Physical persistence of sampled noise in diffusion policies</span>
         <div class="entry-authors"><span class="me">Daniel Ortiz Valencia</span></div>
         <div class="entry-venue">In progress, 2026</div>
-        <p class="entry-blurb">Does the noise a diffusion policy samples leave a lasting physical signature, and can you tell what a trajectory will do before executing it? In a frozen study of 6,176 validated episodes, a ridge model given the start state plus the noise predicts the 100-step tool path with 30.96% lower median error than start state alone, with a 95% confidence interval of 23.9 to 39.9 and a permutation p of 1e-4. The effect is real but bounded. By 300 actions that same linear model is worse than state alone, while the spread between tickets from one start state grows to 330 mm, so the influence persists even where this predictor stops being useful.</p>
+        <p class="entry-blurb">Does the noise a diffusion policy samples leave a lasting physical signature? Across 6,176 validated episodes, start state plus noise predicts the 100-step tool path 30.96% better than start state alone. The effect is real but fades: by 300 actions the same model is worse than state alone.</p>
+      </div>
+    </article>
+
+    <article class="entry">
+      <span class="entry-thumb">
+        <img src="assets/thumbs/tecorobot.jpg" alt="Illustration: a continuum arm bending through a range of poses" loading="lazy" width="1000" height="625" />
+      </span>
+      <div>
+        <span class="entry-tag">Soft Robotics</span>
+        <span class="entry-title entry-title--plain">TeCoRobot: learned control for a soft manipulator</span>
+        <div class="entry-authors"><span class="me">Daniel Ortiz Valencia</span>, advised by Dr. Zhao</div>
+        <div class="entry-venue">Colorado State University, 2026, in progress</div>
+        <p class="entry-blurb">I am the computing side of a mechanical robotics lab, taking a soft manipulator toward a vision-language-action policy. Preliminary design review complete; currently building the inverse kinematics.</p>
       </div>
     </article>
 
@@ -108,7 +120,7 @@
           <a href="assets/papers/fsds-fusion.pdf" target="_blank" rel="noopener">PDF</a><span class="sep">/</span>
           <span class="muted">arXiv soon</span>
         </div>
-        <p class="entry-blurb">A LiDAR-only controller completes laps but weaves on every straight, because it cannot tell blue cones from yellow. Fusing a YOLOv5 camera detector with LiDAR depth brings the two sensors into agreement at 6 cm average match accuracy and removes the oscillation.</p>
+        <p class="entry-blurb">A LiDAR-only controller completes laps but weaves on every straight, because it cannot tell blue cones from yellow. Fusing a YOLOv5 detector with LiDAR depth brings both sensors into agreement at 6 cm and removes the oscillation.</p>
       </div>
     </article>
 
@@ -125,7 +137,7 @@
           <a href="papers/rl-sac-ppo/">Website</a><span class="sep">/</span>
           <a href="assets/papers/fsds-rl-sac-ppo.pdf" target="_blank" rel="noopener">PDF</a>
         </div>
-        <p class="entry-blurb">Six training runs of Soft Actor-Critic, all six of which collapsed. The failures trace to three structural properties of the algorithm rather than to tuning: replay-buffer poisoning, automatic entropy collapse, and a critic whose calibration is tied to one reward shape. PPO removes all three by construction.</p>
+        <p class="entry-blurb">Six training runs of Soft Actor-Critic, all six collapsed. The failures trace to three structural properties of the algorithm rather than to tuning, and PPO removes all three by construction.</p>
       </div>
     </article>
 
@@ -142,7 +154,7 @@
           <a href="assets/papers/AnomalyDetectionPaper.pdf" target="_blank" rel="noopener">PDF</a><span class="sep">/</span>
           <span class="muted">code soon</span>
         </div>
-        <p class="entry-blurb">YOLO fails silently, returning a confident colour label that happens to be wrong. I labelled 129,025 cone detections to measure how often, then trained an XGBoost gate that catches roughly 91% of those errors before they reach the steering controller, at under 0.3 ms per frame on a Raspberry Pi 4.</p>
+        <p class="entry-blurb">YOLO fails silently, returning a confident colour label that is wrong. I labelled 129,025 detections to measure how often, then trained an XGBoost gate that catches about 91% of those errors at under 0.3 ms per frame.</p>
       </div>
     </article>
   </section>
@@ -163,7 +175,7 @@
         <div class="entry-links">
           <a href="https://github.com/danielortval/vr-teleop-kit" target="_blank" rel="noopener">GitHub</a>
         </div>
-        <p class="entry-blurb">A WebXR page running in a Meta Quest streams 6-DoF controller poses over a WebSocket, and a Python teleoperator turns them into joint commands through differential inverse kinematics, with forward kinematics and Jacobians read from a MuJoCo model built from the arm's URDF. Clutch-relative mapping, a reach limit that feels like a wall through haptics, decoupled position and wrist IK with manipulability-adaptive damping, and optional WebRTC camera panels rendered inside VR. Drops into LeRobot as a Teleoperator.</p>
+        <p class="entry-blurb">A WebXR page in a Meta Quest streams controller poses to a Python teleoperator that solves differential inverse kinematics against a MuJoCo model of the arm. Clutch-relative mapping, a reach limit you feel through haptics, and camera panels rendered inside VR. Drops into LeRobot as a Teleoperator.</p>
       </div>
     </article>
   </section>
@@ -171,7 +183,21 @@
   <!-- ============ ENGINEERING (secondary) ============ -->
   <section class="section" id="engineering">
     <h2 class="section-title">Engineering</h2>
-    <p class="section-note">Hardware and vehicle work that came before the research. Covered in full on my <a href="https://danielortval.github.io" target="_blank" rel="noopener" style="color:var(--orange-deep);border-bottom:1px solid var(--orange-soft)">engineering portfolio</a>.</p>
+
+    <div class="xp">
+      <div class="xp-when">2026</div>
+      <div class="xp-body">
+        <h3 class="xp-role">Robotics Engineer <span class="xp-org">· Interlatent</span></h3>
+        <ul class="xp-points">
+          <li>Deploying learned policies onto real robot hardware and keeping them running outside a simulator.</li>
+          <li>Teleoperation: VR control of a bimanual arm, and the pipeline that turns operator demonstrations into usable data.</li>
+          <li>Evaluation: measuring how policies actually behave once deployed, rather than how they score offline.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="sub-head">Formula SAE</h3>
+    <p class="section-note">Vehicle work that came before the research. Covered in full on my <a href="https://danielortval.github.io" target="_blank" rel="noopener">engineering portfolio</a>.</p>
 
     <div class="side-grid">
       <a class="side-card" href="https://danielortval.github.io#projects" target="_blank" rel="noopener">
