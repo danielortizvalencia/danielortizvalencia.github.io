@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script>
+(function () {
+  var root = document.documentElement;
+  var stored = null;
+  try { stored = localStorage.getItem('dov-theme'); } catch (e) {}
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  root.setAttribute('data-theme', stored || (prefersDark ? 'dark' : 'light'));
+})();
+</script>
+<title>Daniel Ortiz Valencia · Research</title>
+<meta name="description" content="Daniel Ortiz Valencia. Robotics and machine learning research: autonomous racing perception, reinforcement learning for control, and robot teleoperation." />
+<meta property="og:title" content="Daniel Ortiz Valencia · Research" />
+<meta property="og:description" content="Robotics and machine learning research: autonomous racing perception, reinforcement learning for control, and robot teleoperation." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23d9741f'/%3E%3Cpath d='M9 8h6a8 8 0 010 16H9z' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <nav class="site-nav">
+      <a href="#research">Research</a>
+      <a href="#projects">Projects</a>
+      <a href="#engineering">Engineering</a>
+    </nav>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <span class="theme-icon-sun" aria-hidden="true">☀</span><span class="theme-icon-moon" aria-hidden="true">☾</span>
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="intro intro--nophoto">
+    <div>
+      <h1 class="intro-name">Daniel Ortiz Valencia</h1>
+      <div class="intro-contact">danielortval at gmail dot com</div>
+
+      <div class="intro-bio">
+        <p>I am a final-year Computer Engineering undergraduate at Colorado State University, applying to graduate programs in robotics and machine learning. I work on autonomy: how a robot turns raw sensing into a decision, and what happens when the learned part of that pipeline fails.</p>
+        <p>Most of my research so far is on the Formula Student Driverless Simulator. I built the perception stack that fuses LiDAR with a camera to follow a cone-delimited track, then tried to replace the hand-written controller with a learned policy and documented the ways that went wrong. I also contribute to robot teleoperation work, on a WebXR system that drives a bimanual arm through differential inverse kinematics.</p>
+        <p>Before the research, I founded Colorado State's first Formula SAE Electric program and designed its 324V battery system. I started undergraduate physics at Universidad de Nariño at 16 before moving to the United States to continue in engineering.</p>
+      </div>
+
+      <div class="intro-links">
+        <a href="https://github.com/danielortval" target="_blank" rel="noopener">GitHub</a><span class="sep">/</span>
+        <a href="https://www.linkedin.com/in/danielortval/" target="_blank" rel="noopener">LinkedIn</a><span class="sep">/</span>
+        <a href="mailto:danielortval@gmail.com">Email</a><span class="sep">/</span>
+        <a href="https://danielortval.github.io" target="_blank" rel="noopener">Engineering portfolio</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RESEARCH ============ -->
+  <section class="section" id="research">
+    <h2 class="section-title">Research</h2>
+
+    <article class="entry">
+      <a class="entry-thumb" href="papers/fsds-fusion/" aria-label="Read: Incremental LiDAR-Camera Sensor Fusion">
+        <video autoplay src="assets/papers/videos/fsds-fusion/fsds-demo.mp4" muted loop playsinline preload="metadata" width="920" height="518"></video>
+      </a>
+      <div>
+        <span class="entry-tag">Perception</span>
+        <a class="entry-title" href="papers/fsds-fusion/">Incremental LiDAR-Camera Sensor Fusion for Reactive Cone Following in the Formula Student Driverless Simulator</a>
+        <div class="entry-authors"><span class="me">Daniel Ortiz Valencia</span>, RAM Racing Driverless</div>
+        <div class="entry-venue">Formula Student Driverless Simulator, 2026</div>
+        <div class="entry-links">
+          <a href="papers/fsds-fusion/">Website</a><span class="sep">/</span>
+          <a href="assets/papers/fsds-fusion.pdf" target="_blank" rel="noopener">PDF</a><span class="sep">/</span>
+          <span class="muted">arXiv soon</span>
+        </div>
+        <p class="entry-blurb">A LiDAR-only controller completes laps but weaves on every straight, because it cannot tell blue cones from yellow. Fusing a YOLOv5 camera detector with LiDAR depth brings the two sensors into agreement at 6 cm average match accuracy and removes the oscillation.</p>
+      </div>
+    </article>
+
+    <article class="entry">
+      <a class="entry-thumb" href="papers/rl-sac-ppo/" aria-label="Read: Reinforcement Learning for Steering Control">
+        <img src="assets/papers/videos/rl-sac-ppo/hero-poster.jpg" alt="The FSAE car driving a cone-lined track in simulation" loading="lazy" />
+      </a>
+      <div>
+        <span class="entry-tag">Reinforcement Learning</span>
+        <a class="entry-title" href="papers/rl-sac-ppo/">Reinforcement Learning for Steering Control in the Formula Student Driverless Simulator: Structural Failure Modes of Soft Actor-Critic and the Case for PPO</a>
+        <div class="entry-authors"><span class="me">Daniel Ortiz Valencia</span></div>
+        <div class="entry-venue">Electrical &amp; Computer Engineering, Colorado State University, 2026</div>
+        <div class="entry-links">
+          <a href="papers/rl-sac-ppo/">Website</a><span class="sep">/</span>
+          <a href="assets/papers/fsds-rl-sac-ppo.pdf" target="_blank" rel="noopener">PDF</a>
+        </div>
+        <p class="entry-blurb">Six training runs of Soft Actor-Critic, all six of which collapsed. The failures trace to three structural properties of the algorithm rather than to tuning: replay-buffer poisoning, automatic entropy collapse, and a critic whose calibration is tied to one reward shape. PPO removes all three by construction.</p>
+      </div>
+    </article>
+
+    <article class="entry">
+      <a class="entry-thumb" href="assets/papers/AnomalyDetectionPaper.pdf" target="_blank" rel="noopener" aria-label="Read: YOLO Color Anomaly Detection (PDF)">
+        <img src="assets/papers/anomaly-yolo-failure.jpg" alt="A YOLO failure frame: a blue cone labeled orange at high confidence" loading="lazy" />
+      </a>
+      <div>
+        <span class="entry-tag">Safety / ML</span>
+        <a class="entry-title" href="assets/papers/AnomalyDetectionPaper.pdf" target="_blank" rel="noopener">YOLO Color Anomaly Detection for FSAE Driverless: From Ground-Truth Dataset Construction to an XGBoost Safety Gate</a>
+        <div class="entry-authors"><span class="me">Daniel Ortiz Valencia</span></div>
+        <div class="entry-venue">ECE553, Colorado State University, 2026</div>
+        <div class="entry-links">
+          <a href="assets/papers/AnomalyDetectionPaper.pdf" target="_blank" rel="noopener">PDF</a><span class="sep">/</span>
+          <span class="muted">code soon</span>
+        </div>
+        <p class="entry-blurb">YOLO fails silently, returning a confident colour label that happens to be wrong. I labelled 129,025 cone detections to measure how often, then trained an XGBoost gate that catches roughly 91% of those errors before they reach the steering controller, at under 0.3 ms per frame on a Raspberry Pi 4.</p>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section class="section" id="projects">
+    <h2 class="section-title">Projects</h2>
+
+    <article class="entry">
+      <a class="entry-thumb is-placeholder" href="https://github.com/danielortval/vr-teleop-kit" target="_blank" rel="noopener" aria-label="VR Teleop Kit on GitHub">
+        <span>WebXR&nbsp;→&nbsp;IK<br><small>media to come</small></span>
+      </a>
+      <div>
+        <span class="entry-tag">Teleoperation</span>
+        <a class="entry-title" href="https://github.com/danielortval/vr-teleop-kit" target="_blank" rel="noopener">VR Teleoperation Kit for Robot Manipulators</a>
+        <div class="entry-authors">Aurel Arnold, <span class="me">Daniel Ortiz Valencia</span>, and contributors</div>
+        <div class="entry-venue">Open source, integrates with LeRobot</div>
+        <div class="entry-links">
+          <a href="https://github.com/danielortval/vr-teleop-kit" target="_blank" rel="noopener">GitHub</a>
+        </div>
+        <p class="entry-blurb">A WebXR page running in a Meta Quest streams 6-DoF controller poses over a WebSocket, and a Python teleoperator turns them into joint commands through differential inverse kinematics, with forward kinematics and Jacobians read from a MuJoCo model built from the arm's URDF. Clutch-relative mapping, a reach limit that feels like a wall through haptics, decoupled position and wrist IK with manipulability-adaptive damping, and optional WebRTC camera panels rendered inside VR. Drops into LeRobot as a Teleoperator.</p>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============ ENGINEERING (secondary) ============ -->
+  <section class="section" id="engineering">
+    <h2 class="section-title">Engineering</h2>
+    <p class="section-note">Hardware and vehicle work that came before the research. Covered in full on my <a href="https://danielortval.github.io" target="_blank" rel="noopener" style="color:var(--orange-deep);border-bottom:1px solid var(--orange-soft)">engineering portfolio</a>.</p>
+
+    <div class="side-grid">
+      <a class="side-card" href="https://danielortval.github.io#projects" target="_blank" rel="noopener">
+        <div class="side-meta">Electrical System Officer · FSAE 2026</div>
+        <h3>Venus EV</h3>
+        <p>Colorado's first Formula SAE Electric car. Designed the 324V, 8.64 kWh accumulator from cell level: 90s5p Molicel P50B, segmented pack, HV safety stack, and the fuse-link characterization behind it.</p>
+      </a>
+      <a class="side-card" href="https://danielortval.github.io#projects" target="_blank" rel="noopener">
+        <div class="side-meta">Chief Engineer · FSAE 2025 EV</div>
+        <h3>Rubicon EV</h3>
+        <p>First CSU electric car. Owned the full vehicle electrical architecture: HV and LV interfaces, tractive system active lights, brake plausibility hardware, and PM100 powertrain bench validation with a CAN fault-injection framework.</p>
+      </a>
+      <a class="side-card" href="https://danielortval.github.io#projects" target="_blank" rel="noopener">
+        <div class="side-meta">Assistant Electrical Lead · FSAE 2024 IC</div>
+        <h3>Intrepid IC</h3>
+        <p>Combustion car. Full harness integration across the vehicle and a telemetry control unit for wireless data off the car.</p>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer wrap">
+  <span>© <span id="year"></span> Daniel Ortiz Valencia</span>
+  <span>Computer Engineering, Colorado State University</span>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+(function () {
+  var root = document.documentElement;
+  var btn = document.getElementById('theme-toggle');
+  btn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('dov-theme', next); } catch (e) {}
+  });
+  // play the inline entry clip only while it is on screen
+  var clips = [].slice.call(document.querySelectorAll('.entry-thumb video'));
+  if ('IntersectionObserver' in window && clips.length) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.play().catch(function () {}); }
+        else { e.target.pause(); }
+      });
+    }, { threshold: 0.2 });
+    clips.forEach(function (v) { io.observe(v); });
+  }
+})();
+</script>
+</body>
+</html>
