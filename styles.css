@@ -1,5 +1,5 @@
 /* ============================================================
-   Daniel Ortiz Valencia — Research
+   Daniel Ortiz Valencia · Research
    Academic homepage. Shares its design tokens with the
    engineering portfolio so the project pages under /papers/
    render identically on both sites.
@@ -158,7 +158,9 @@ img { max-width: 100%; }
 .entry-thumb.is-placeholder small { color: var(--ink-faint); }
 .intro--nophoto { grid-template-columns: 1fr; }
 .entry-title { font-size: var(--text-lg); font-weight: 700; color: var(--orange-deep); line-height: 1.35; letter-spacing: -0.01em; display: inline-block; }
-.entry-title:hover { text-decoration: underline; }
+a.entry-title:hover { text-decoration: underline; }
+/* entries with nothing public to link to yet */
+.entry-title--plain { color: var(--ink); }
 .entry-authors { font-size: var(--text-sm); color: var(--ink-soft); margin-top: .45rem; }
 .entry-authors .me { font-weight: 700; color: var(--ink); }
 .entry-venue { font-size: var(--text-sm); color: var(--ink-faint); font-style: italic; margin-top: .15rem; }
