@@ -17,7 +17,8 @@
 <meta property="og:title" content="Daniel Ortiz Valencia · Research" />
 <meta property="og:description" content="Robotics and machine learning research: autonomous racing perception, reinforcement learning for control, and robot teleoperation." />
 <meta property="og:type" content="website" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23d9741f'/%3E%3Cpath d='M9 8h6a8 8 0 010 16H9z' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
@@ -28,6 +29,7 @@
   <div class="site-header-inner">
     <nav class="site-nav">
       <a href="#research">Research</a>
+      <a href="#experience">Experience</a>
       <a href="#projects">Projects</a>
       <a href="#engineering">Engineering</a>
     </nav>
@@ -76,7 +78,7 @@
         <span class="entry-title entry-title--plain">TicketBank: location-targeted noise search for frozen diffusion policies</span>
         <div class="entry-authors"><span class="me">Daniel Ortiz Valencia</span></div>
         <div class="entry-venue">Under review, 2026</div>
-        <p class="entry-blurb">A frozen diffusion policy normally reuses one noise sample everywhere. I test whether the best sample depends on where the objects start. Pre-registered gains of 25.8 and 20.8 points on two Franka checkpoints, nothing significant on the other two, and on Transport the early advantage did not survive compute matching.</p>
+        <p class="entry-blurb">A frozen diffusion policy reuses one noise sample everywhere. Does the best one depend on where the objects start? Pre-registered gains of 25.8 and 20.8 points on two Franka checkpoints, nothing on the other two, and on Transport the early win did not survive compute matching.</p>
       </div>
     </article>
 
@@ -89,7 +91,7 @@
         <span class="entry-title entry-title--plain">Physical persistence of sampled noise in diffusion policies</span>
         <div class="entry-authors"><span class="me">Daniel Ortiz Valencia</span></div>
         <div class="entry-venue">In progress, 2026</div>
-        <p class="entry-blurb">Does the noise a diffusion policy samples leave a lasting physical signature? Across 6,176 validated episodes, start state plus noise predicts the 100-step tool path 30.96% better than start state alone. The effect is real but fades: by 300 actions the same model is worse than state alone.</p>
+        <p class="entry-blurb">Does sampled noise leave a lasting physical signature? Across 6,176 episodes, start state plus noise predicts the 100-step tool path 30.96% better than start state alone. The effect fades: by 300 actions the model is worse than state alone.</p>
       </div>
     </article>
 
@@ -159,6 +161,23 @@
     </article>
   </section>
 
+  <!-- ============ EXPERIENCE ============ -->
+  <section class="section" id="experience">
+    <h2 class="section-title">Experience</h2>
+
+    <div class="xp">
+      <div class="xp-when">2026</div>
+      <div class="xp-body">
+        <h3 class="xp-role">Robotics Engineer <span class="xp-org">· Interlatent</span></h3>
+        <ul class="xp-points">
+          <li>Deploying learned policies onto real robot hardware and keeping them running outside a simulator.</li>
+          <li>Teleoperation: VR control of a bimanual arm, and the pipeline that turns operator demonstrations into usable data.</li>
+          <li>Evaluation: measuring how policies actually behave once deployed, rather than how they score offline.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ PROJECTS ============ -->
   <section class="section" id="projects">
     <h2 class="section-title">Projects</h2>
@@ -175,7 +194,7 @@
         <div class="entry-links">
           <a href="https://github.com/danielortval/vr-teleop-kit" target="_blank" rel="noopener">GitHub</a>
         </div>
-        <p class="entry-blurb">A WebXR page in a Meta Quest streams controller poses to a Python teleoperator that solves differential inverse kinematics against a MuJoCo model of the arm. Clutch-relative mapping, a reach limit you feel through haptics, and camera panels rendered inside VR. Drops into LeRobot as a Teleoperator.</p>
+        <p class="entry-blurb">A WebXR page in a Meta Quest streams controller poses to a Python teleoperator that solves differential inverse kinematics against a MuJoCo model of the arm. Drops into LeRobot as a Teleoperator.</p>
       </div>
     </article>
   </section>
@@ -184,19 +203,6 @@
   <section class="section" id="engineering">
     <h2 class="section-title">Engineering</h2>
 
-    <div class="xp">
-      <div class="xp-when">2026</div>
-      <div class="xp-body">
-        <h3 class="xp-role">Robotics Engineer <span class="xp-org">· Interlatent</span></h3>
-        <ul class="xp-points">
-          <li>Deploying learned policies onto real robot hardware and keeping them running outside a simulator.</li>
-          <li>Teleoperation: VR control of a bimanual arm, and the pipeline that turns operator demonstrations into usable data.</li>
-          <li>Evaluation: measuring how policies actually behave once deployed, rather than how they score offline.</li>
-        </ul>
-      </div>
-    </div>
-
-    <h3 class="sub-head">Formula SAE</h3>
     <p class="section-note">Vehicle work that came before the research. Covered in full on my <a href="https://danielortval.github.io" target="_blank" rel="noopener">engineering portfolio</a>.</p>
 
     <div class="side-grid">
