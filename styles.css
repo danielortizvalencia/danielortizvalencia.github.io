@@ -191,6 +191,16 @@ a.entry-title:hover { text-decoration: underline; }
 .xp-points li { position: relative; padding-left: 1rem; font-size: var(--text-sm); color: var(--ink-soft); line-height: 1.7; margin-bottom: .3rem; }
 .xp-points li::before { content: ""; position: absolute; left: 0; top: .72em; width: 5px; height: 5px; border-radius: 50%; background: var(--orange-soft); }
 
+.xp-split { display: grid; grid-template-columns: 1fr 260px; gap: 1.5rem; align-items: start; margin-top: .75rem; }
+.xp-lede { font-size: var(--text-sm); color: var(--ink-soft); line-height: 1.7; margin: 0 0 1.05rem; }
+.xp-item { display: grid; grid-template-columns: 2.2rem 1fr; margin-bottom: .95rem; }
+.xp-item:last-child { margin-bottom: 0; }
+.xp-num { font-size: var(--text-xs); font-weight: 800; color: var(--orange-deep); letter-spacing: .04em; padding-top: .2rem; }
+.xp-item h4 { font-size: var(--text-sm); font-weight: 700; color: var(--ink); margin: 0 0 .28rem; letter-spacing: -0.005em; }
+.xp-item p { font-size: var(--text-sm); color: var(--ink-soft); line-height: 1.7; margin: 0; }
+.xp-figure { margin: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--kw-bg); }
+.xp-figure img { display: block; width: 100%; height: auto; }
+
 .sub-head { font-size: var(--text-base); font-weight: 700; color: var(--ink); margin: 1.6rem 0 .5rem; padding-top: 1.4rem; border-top: 1px solid var(--line); }
 .section-note a { color: var(--orange-deep); border-bottom: 1px solid var(--orange-soft); }
 .section-note a:hover { border-color: var(--orange); }
@@ -221,12 +231,26 @@ a.entry-title:hover { text-decoration: underline; }
   display: flex; flex-wrap: wrap; gap: .8rem; justify-content: space-between;
 }
 
+/* The figure needs a real text column beside it, so stack earlier than the
+   page's main breakpoint. */
+/* Four nav items no longer fit a phone at the desktop gap. */
+@media (max-width: 520px) {
+  .site-header-inner { padding-left: 1rem; padding-right: 1rem; gap: .6rem; }
+  .site-nav { gap: .85rem; font-size: var(--text-xs); min-width: 0; }
+}
+@media (max-width: 900px) {
+  .xp-split { grid-template-columns: 1fr; gap: 1.1rem; }
+  .xp-figure { max-width: 340px; }
+}
 @media (max-width: 760px) {
   .intro { grid-template-columns: 1fr; }
   .intro-photo { max-width: 260px; }
   .entry { grid-template-columns: 1fr; }
   .entry-thumb { max-width: 320px; }
   .update { grid-template-columns: 78px 1fr; gap: .7rem; }
+  .xp { grid-template-columns: 62px 1fr; gap: .7rem; }
+  .xp-split { grid-template-columns: 1fr; gap: 1.1rem; }
+  .xp-figure { max-width: 320px; }
 }
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto; }
