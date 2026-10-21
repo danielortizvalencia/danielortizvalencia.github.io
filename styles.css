@@ -14,10 +14,13 @@
   --line: #e6e6e2;
   --line-strong: #d4d4ce;
 
-  --orange: #d9741f;
-  --orange-deep: #c1620f;
-  --orange-soft: #f7e0c2;
-  --orange-tint: #fcf1e2;
+  /* The accent keeps the orange-* token names so the project pages under
+     /papers/ pick it up unchanged. The research site reads blue; the
+     engineering portfolio stays orange. */
+  --orange: #2f6bd8;
+  --orange-deep: #1d4fa8;
+  --orange-soft: #c9dcf7;
+  --orange-tint: #eef4fd;
 
   --mono: 'JetBrains Mono', 'SFMono-Regular', 'Menlo', monospace;
 
@@ -51,14 +54,14 @@
   --line: #2a2a2e;
   --line-strong: #3a3a3f;
 
-  --orange: #ff8a3d;
-  --orange-deep: #ff9d5c;
-  --orange-soft: #5a3a1a;
-  --orange-tint: #2a1d10;
+  --orange: #6ea8fe;
+  --orange-deep: #93c0ff;
+  --orange-soft: #1f3a5f;
+  --orange-tint: #13233a;
 
   --header-bg: rgba(17,17,20,0.88);
   --kw-bg: #1f1f23;
-  --on-orange: #111114;
+  --on-orange: #0b1220;
 
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
   --shadow-md: 0 8px 30px rgba(0,0,0,0.5);
@@ -187,6 +190,12 @@ a.entry-title:hover { text-decoration: underline; }
   transition: border-color .18s ease, transform .18s ease;
 }
 .side-card:hover { border-color: var(--orange-soft); transform: translateY(-2px); }
+.side-card { overflow: hidden; padding: 0; display: flex; flex-direction: column; }
+.side-thumb { display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--kw-bg); border-bottom: 1px solid var(--line); }
+.side-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.side-card .side-meta, .side-card h3, .side-card p { padding-left: 1.1rem; padding-right: 1.1rem; }
+.side-card .side-meta { padding-top: .9rem; }
+.side-card p { padding-bottom: 1.1rem; }
 .side-card h3 { font-size: var(--text-base); font-weight: 700; margin-bottom: .3rem; }
 .side-card p { font-size: var(--text-xs); color: var(--ink-faint); line-height: 1.65; }
 .side-card .side-meta { font-size: var(--text-xs); color: var(--orange-deep); font-weight: 700; margin-bottom: .35rem; }
