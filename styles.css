@@ -200,6 +200,11 @@ a.entry-title:hover { text-decoration: underline; }
 .xp-item p { font-size: var(--text-sm); color: var(--ink-soft); line-height: 1.7; margin: 0; }
 .xp-figure { margin: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--kw-bg); }
 .xp-figure img { display: block; width: 100%; height: auto; }
+.xp-figure a { display: block; }
+.xp-figcap { font-size: var(--text-xs); padding: .5rem .7rem; border-top: 1px solid var(--line); }
+.xp-figcap a { color: var(--orange-deep); font-weight: 600; }
+.xp-role a { color: inherit; border-bottom: 2px solid var(--orange-soft); }
+.xp-role a:hover { color: var(--orange-deep); border-color: var(--orange); }
 
 .sub-head { font-size: var(--text-base); font-weight: 700; color: var(--ink); margin: 1.6rem 0 .5rem; padding-top: 1.4rem; border-top: 1px solid var(--line); }
 .section-note a { color: var(--orange-deep); border-bottom: 1px solid var(--orange-soft); }

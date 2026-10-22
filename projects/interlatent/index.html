@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script>
+// Same hash guard as the other project pages: the native jump fires before the
+// webfont and the embeds settle, so strip it and let paper-page.js re-apply.
+(function () {
+  if (!location.hash) return;
+  window.__ppPendingHash = location.hash;
+  history.replaceState(null, '', location.pathname + location.search);
+})();
+</script>
+<title>Teleoperation and Validation at Interlatent · Daniel Ortiz Valencia</title>
+<meta name="description" content="Driving robots from a VR headset, and instrumenting the control loop on the robot's own hardware to find out whether it holds its timing." />
+<meta property="og:title" content="Teleoperation and Validation at Interlatent" />
+<meta property="og:description" content="Deploying frontier models on physical robots: the teleoperation path, and measuring it where it actually runs." />
+<meta property="og:type" content="article" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../styles.css" />
+<link rel="stylesheet" href="../../assets/papers/paper-page.css" />
+</head>
+<body>
+
+<div class="pp-stickytop">
+  <header class="pp-topbar">
+    <a class="pp-topbar-back" href="../../index.html#experience"><span class="arrow">←</span> Daniel Ortiz Valencia</a>
+    <div class="pp-topbar-actions">
+      <a class="pp-btn" href="https://github.com/Interlatent/Deployment-Infra" target="_blank" rel="noopener">SDK ↗</a>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <span class="theme-icon-sun" aria-hidden="true">☀</span><span class="theme-icon-moon" aria-hidden="true">☾</span>
+      </button>
+    </div>
+  </header>
+  <div class="pp-storynav-wrap">
+    <nav class="pp-storynav">
+      <a href="#background">Background</a>
+      <a href="#approach">Technical Approach</a>
+      <a href="#results">Results</a>
+    </nav>
+  </div>
+</div>
+
+<!-- ============ HERO ============ -->
+<section class="pp-hero pp-hero--diagram">
+  <img src="../../assets/img/interlatent.jpg" alt="Illustration: one operator station connected to a fleet of five robot arms" width="1000" height="625" />
+  <div class="pp-hero-content">
+    <div class="pp-hero-badges">
+      <span class="pp-badge is-orange">Industry</span>
+      <span class="pp-badge">Interlatent · Palo Alto · 2026</span>
+    </div>
+    <h1 class="pp-hero-title">Driving robots from a headset, and measuring the loop that carries it</h1>
+    <p class="pp-hero-sub">I helped build the hardware and software infrastructure for deploying frontier models on physical robots. This page covers the teleoperation path and the instrumentation I added to find out whether it holds its timing on the hardware it actually runs on.</p>
+  </div>
+</section>
+
+<!-- ============ TLDR ============ -->
+<section class="pp-section pp-tldr">
+  <div class="pp-section-inner">
+    <span class="pp-eyebrow">In Short</span>
+    <h2 class="pp-section-title">A teleoperated robot is a recording device, so its timing is a data-quality problem</h2>
+    <div class="pp-prose">
+      <p class="pp-lede">When an operator drives a robot in VR, every episode becomes training data for a policy. What the policy later learns is bounded by what the operator could see and do at that moment, so a control loop that misses its period is not a comfort problem, it is a corpus problem. I scaled teleoperation from one robot to a five-robot fleet, and wrote a profiler that runs on the robot's own node so the question could be answered with numbers instead of impressions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BACKGROUND ============ -->
+<section id="background" class="pp-section">
+  <div class="pp-section-inner">
+    <span class="pp-eyebrow">I · Background</span>
+    <h2 class="pp-section-title">One interface, many arms, and a human in the loop</h2>
+    <div class="pp-prose">
+      <p>Interlatent is dataset curation for robotics. Its open-source SDK is the half that stands next to the robots: one interface to roll out a policy, teleoperate, and collect data the same way on every supported arm. The problem it removes is mundane and expensive. An SO-101 takes six joints in degrees with the gripper on nought to a hundred, a YAM takes fourteen in radians with the gripper on nought to one, a Nori takes twelve normalized to plus or minus a hundred. Nothing about the task changed between them, but the control code, the teleop rig, the recorder, and the policy glue all get written again from scratch.</p>
+      <p>Teleoperation here means a human driving the robot in real time, in VR, over the network. The operator opens a page in a Meta Quest browser and their hand becomes the robot's end effector. Its production purpose is remote human demonstration: a session with no policy loaded, where every episode is captured as training data. Engage it part way through a policy rollout instead and the human-driven steps are recorded with their own label, which is what makes intervention data usable rather than merely present.</p>
+      <p>My part of this ran from operator control through to checking what the robots did once a policy was driving them. On the control side I scaled from a single robot to a five-robot fleet.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TECHNICAL APPROACH ============ -->
+<section id="approach" class="pp-section pp-section--tint">
+  <div class="pp-section-inner">
+    <span class="pp-eyebrow">II · Technical Approach</span>
+    <h2 class="pp-section-title">Compute the target off the robot, keep the robot dumb and safe</h2>
+
+    <h3 class="pp-subhead">The platform</h3>
+    <div class="pp-prose">
+      <p>The design principle in the SDK is producer in the browser, thin receiver on the robot. Everything that computes a joint target, meaning the VR pose retargeting and the inverse kinematics, runs off the robot. The browser solves IK against a compact kinematic spec that the node itself serves, and the node keeps only a receiver plus the last-hop safety clamp. Joint targets stream over QUIC as unreliable datagrams, because a stale pose is worthless and must never queue behind a newer one; when a datagram genuinely goes missing the node holds the last target rather than extrapolating a motion nobody commanded. All motion, human or policy, converges on the same node-side interface: an absolute joint target, then the safety gate, then the send. Out comes a LeRobot v3.0 dataset with every frame labelled by who was driving it.</p>
+      <p>That architecture is not mine. It is documented in the open-source repository and was built mostly by others on the team; I am describing it because the next part only makes sense against it.</p>
+    </div>
+
+    <figure class="pp-figure pp-embed">
+      <blockquote class="twitter-tweet" data-dnt="true" data-align="center">
+        <p lang="en" dir="ltr">Browser-based VR teleop over a low-latency UDP path, running on a Raspberry Pi 5 with bimanual YAM arms.</p>
+        <a href="https://twitter.com/sean_pixel/status/2078247149842968747">Posted by @sean_pixel, 17 July 2026</a>
+      </blockquote>
+      <figcaption><b>Clip 1.</b> The teleoperation path in use, with the browser solving IK and streaming joint targets. Recorded and posted by <a href="https://x.com/sean_pixel/status/2078247149842968747" target="_blank" rel="noopener">@sean_pixel</a>, not by me.</figcaption>
+    </figure>
+
+    <h3 class="pp-subhead">What I added</h3>
+    <div class="pp-prose">
+      <p>You cannot tune a loop you cannot see. I added a per-session teleoperation profiler that runs on the robot node itself, and wired it into the control loop that actually drives the arm rather than into a test harness alongside it. The distinction matters: a harness measures a loop shaped like the real one, and the gap between those two is exactly where timing bugs live.</p>
+      <p>Two details were deliberate. The profiler is log-first, so a session still yields its numbers when the file it would normally write cannot be opened, which is the situation you are most likely to be in on a robot in a lab. And it runs on the node's own hardware, a Raspberry Pi, rather than on a workstation, because the whole question is what that hardware can sustain.</p>
+      <p>Alongside it I did the continuous-integration work that keeps the package honest about its dependencies: enforcing that imports work without the optional extras installed, and running the test suite on ARM, since ARM is what the robot nodes are.</p>
+    </div>
+
+    <div class="pp-callout">
+      <p>All five of my commits to the open-source SDK are public, and they are the profiler and that CI work. The teleoperation transport, the in-browser IK and the safety gate described above belong to other people on the team.</p>
+    </div>
+
+    <h3 class="pp-subhead">Validating the agent</h3>
+    <div class="pp-prose">
+      <p>The second half of the work was evaluation. I designed physical test benches and evaluation matrices to test policy-inference optimization ideas on real robots, with input from engineers at NVIDIA and Google.</p>
+      <p>The matrix itself was built around one constraint: every comparison varies a single axis. Pairing a baseline dataset against one that holds the task fixed but shortens the episodes isolates sensitivity to episode length; pairing it against a harder task at the same modality isolates task semantics. Get that wrong and a failure has two candidate causes and tells you nothing. Get it right and each failure attributes to exactly one. The blocks covered ingest and scale, whether the system was genuinely reading the frames or writing plausible fiction, temporal and phase reasoning, determinism across repeated runs, cross-clip curation, how cost scaled with clip length, whether it would mutate stored data without being asked, and whether any of it transferred to a task it had not seen.</p>
+    </div>
+
+    <figure class="pp-figure pp-embed">
+      <blockquote class="twitter-tweet" data-dnt="true" data-align="center">
+        <p lang="en" dir="ltr">A thousand episodes densely annotated by the agent in about ten minutes, driven from the batch view.</p>
+        <a href="https://twitter.com/sean_pixel/status/2112276483314184514">Posted by @sean_pixel, 19 October 2026</a>
+      </blockquote>
+      <figcaption><b>Clip 2.</b> The annotation agent running in production on a public thousand-episode dataset. This is the system the matrix above was built to stress, not a recording of the validation itself. Posted by <a href="https://x.com/sean_pixel/status/2112276483314184514" target="_blank" rel="noopener">@sean_pixel</a>.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ RESULTS ============ -->
+<section id="results" class="pp-section">
+  <div class="pp-section-inner">
+    <span class="pp-eyebrow">III · Results</span>
+    <h2 class="pp-section-title">Turning a complaint into a per-stage budget</h2>
+    <div class="pp-prose">
+      <p>The profiler changed the shape of the question. Before it, a slow session was a report that teleoperation felt laggy, which is unfalsifiable and points at nothing. After it, every session produced a per-second record of where the loop's time went, split by stage, on the node that ran it.</p>
+      <p>That made an A/B possible. Holding the robot kind, the configured rate and the schema fixed and changing only the host the node ran on separates two explanations that look identical from the outside: code that is too slow, and a host that is being throttled. Without per-stage numbers from the machine itself, those are indistinguishable, and teams spend days optimizing code to fix a power setting.</p>
+      <p>On the evaluation side, the bench results fed two decisions: whether a given change was ready to deploy, and which integration or reliability issues needed fixing first.</p>
+    </div>
+
+    <div class="pp-callout">
+      <p>The measured numbers from that A/B study, and the figure drawn from them, are held back here pending a check with Interlatent. They are my own report and my own data, but they describe a deployment that is not mine to publish.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLOSE ============ -->
+<section class="pp-section pp-close">
+  <div class="pp-section-inner">
+    <div class="pp-prose">
+      <p>The through line from here to the rest of my work is the same one: a learned system is only as good as the evidence you are willing to gather about it, and most of that evidence has to come from the hardware it actually runs on.</p>
+      <p><a href="../../index.html#experience">Back to the rest of my work</a> · <a href="https://github.com/Interlatent/Deployment-Infra" target="_blank" rel="noopener">The open-source SDK ↗</a></p>
+    </div>
+  </div>
+</section>
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script src="../../assets/papers/paper-page.js"></script>
+</body>
+</html>

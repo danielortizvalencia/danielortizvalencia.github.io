@@ -49,7 +49,7 @@
   overflow: hidden;
   background: var(--pp-dark-bg);
 }
-.pp-hero video, .pp-hero .pp-hero-poster {
+.pp-hero video, .pp-hero img, .pp-hero .pp-hero-poster {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
@@ -298,3 +298,22 @@
 @media (prefers-reduced-motion: reduce) {
   .pp-scrolldown { animation: none; }
 }
+
+
+/* ---------- Added for the Interlatent page ---------- */
+
+/* A schematic hero, unlike the footage heroes: cover-cropping a diagram cuts
+   the diagram in half, so contain it and let the dark plate show through. */
+.pp-hero--diagram img { object-fit: contain; opacity: .8; padding: 7vh 6vw 22vh; }
+
+.pp-subhead {
+  font-size: var(--text-base); font-weight: 800; letter-spacing: -0.01em;
+  color: var(--ink); margin: 2.1rem 0 .7rem;
+}
+.pp-subhead:first-of-type { margin-top: 1.2rem; }
+
+/* Third-party embeds bring their own chrome, so this only centres them and
+   keeps the caption attached. */
+.pp-embed { display: flex; flex-direction: column; align-items: center; }
+.pp-embed blockquote { width: 100%; max-width: 550px; margin: 0 auto; }
+.pp-embed figcaption { max-width: 640px; }
