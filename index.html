@@ -29,6 +29,7 @@
   <div class="site-header-inner">
     <nav class="site-nav">
       <a href="#research">Research</a>
+      <a href="#interlatent">Interlatent</a>
       <a href="#projects">Projects</a>
       <a href="#engineering">Engineering</a>
     </nav>
@@ -107,22 +108,6 @@
       </div>
     </article>
 
-    <article class="entry">
-      <a class="entry-thumb" href="projects/interlatent/" aria-label="Read: Teleoperation and deployment validation at Interlatent">
-        <img src="assets/img/interlatent.jpg" alt="Illustration: one operator station connected to a fleet of five robot arms" loading="lazy" width="1000" height="625" />
-      </a>
-      <div>
-        <span class="entry-tag">Robot Learning</span>
-        <a class="entry-title" href="projects/interlatent/">Teleoperation and deployment validation for learned policies on physical robots</a>
-        <div class="entry-authors"><span class="me">Daniel Ortiz Valencia</span>, with the Interlatent team</div>
-        <div class="entry-venue">Robotics Engineer Intern, Interlatent, Palo Alto, June 2026 to present</div>
-        <div class="entry-links">
-          <a href="projects/interlatent/">Website</a><span class="sep">/</span>
-          <a href="https://github.com/Interlatent/Deployment-Infra" target="_blank" rel="noopener">SDK</a>
-        </div>
-        <p class="entry-blurb">Helping deploy frontier models onto real robots. I scaled VR teleoperation from a single arm to a five-robot fleet, then wrote the profiler that runs on the robot's own node, so the control loop's timing could be measured rather than guessed at.</p>
-      </div>
-    </article>
 
     <article class="entry">
       <a class="entry-thumb" href="papers/fsds-fusion/" aria-label="Read: Incremental LiDAR-Camera Sensor Fusion">
@@ -177,6 +162,44 @@
     </article>
   </section>
 
+  <!-- ============ INTERLATENT ============ -->
+  <section class="section" id="interlatent">
+    <h2 class="section-title">Interlatent</h2>
+    <p class="section-note">Robotics Engineer Intern, Palo Alto, June 2026 to present. Building the hardware and software infrastructure for deploying frontier models onto physical robots. <a href="projects/interlatent/">Full write-up</a> &middot; <a href="https://github.com/Interlatent/Deployment-Infra" target="_blank" rel="noopener">SDK</a></p>
+
+    <figure class="group-figure">
+      <a href="projects/interlatent/" aria-label="Read the full Interlatent write-up">
+        <img src="assets/img/interlatent.jpg" alt="Illustration: one operator station connected to a fleet of five robot arms" loading="lazy" width="1000" height="625" />
+      </a>
+    </figure>
+
+    <article class="entry">
+      <a class="entry-thumb" href="projects/interlatent/#teleop" aria-label="Read: inverse kinematics and VR teleoperation">
+        <img src="assets/projects/interlatent/teleoperation-architecture.png" alt="System map: browser-side IK, a thin relay, and safety enforced on the robot" loading="lazy" />
+      </a>
+      <div>
+        <span class="entry-tag">Teleoperation</span>
+        <a class="entry-title" href="projects/interlatent/#teleop">Inverse kinematics and VR teleoperation across a robot fleet</a>
+        <div class="entry-authors"><span class="me">Daniel Ortiz Valencia</span>, with the Interlatent team</div>
+        <div class="entry-venue">Interlatent, 2026</div>
+        <p class="entry-blurb">The Quest browser reads controller poses; clutch-relative mapping anchors motion to the robot's current pose, and damped least-squares IK turns it into joint targets. Scaled from a single arm to a five-robot fleet, across arms that disagree on joint units and gripper ranges.</p>
+      </div>
+    </article>
+
+    <article class="entry">
+      <a class="entry-thumb" href="projects/interlatent/#validation" aria-label="Read: validating the curation agents">
+        <img src="assets/thumbs/validation.jpg" alt="Illustration: an evaluation matrix with some cells passing and some flagged" loading="lazy" width="1000" height="625" />
+      </a>
+      <div>
+        <span class="entry-tag">Evaluation</span>
+        <a class="entry-title" href="projects/interlatent/#validation">Validating dataset curation agents against the recordings themselves</a>
+        <div class="entry-authors"><span class="me">Daniel Ortiz Valencia</span>, with input from NVIDIA and Google engineers</div>
+        <div class="entry-venue">Interlatent, 2026</div>
+        <p class="entry-blurb">A campaign to find where the agents break: visual hallucination, temporal drift, repeatability, cost, and unintended writes to stored annotations. Datasets were paired so each comparison varied one axis, and every answer was checked against the footage.</p>
+      </div>
+    </article>
+  </section>
+
   <!-- ============ PROJECTS ============ -->
   <section class="section" id="projects">
     <h2 class="section-title">Projects</h2>
@@ -202,30 +225,67 @@
   <section class="section" id="engineering">
     <h2 class="section-title">Engineering</h2>
 
-    <p class="section-note">Vehicle work that came before the research. Each card opens the full write-up, subsystem by subsystem.</p>
+    <p class="section-note">Vehicle work that came before the research. Each one opens its full write-up, subsystem by subsystem.</p>
 
-    <div class="side-grid">
-      <a class="side-card" href="projects/venus-ev/">
-        <span class="side-thumb"><img src="assets/img/venus.jpg" alt="The RAM Racing team lifting the Venus EV car" loading="lazy" /></span><div class="side-meta">Electrical System Officer · FSAE 2026</div>
-        <h3>Venus EV</h3>
-        <p>Colorado's first Formula SAE Electric car. Designed the 324V, 8.64 kWh accumulator from cell level: 90s5p Molicel P50B, segmented pack, HV safety stack, and the fuse-link characterization behind it.</p>
+    <article class="entry">
+      <a class="entry-thumb" href="projects/venus-ev/" aria-label="Read: Venus EV">
+        <img src="assets/img/venus.jpg" alt="The RAM Racing team lifting the Venus EV car" loading="lazy" />
       </a>
-      <a class="side-card" href="projects/rubicon-ev/">
-        <span class="side-thumb"><img src="assets/img/rubicon.jpg" alt="Rubicon EV with the team at CSU Powerhouse Energy Campus" loading="lazy" /></span><div class="side-meta">Chief Engineer · FSAE 2025 EV</div>
-        <h3>Rubicon EV</h3>
-        <p>First CSU electric car. Owned the full vehicle electrical architecture: HV and LV interfaces, tractive system active lights, brake plausibility hardware, and PM100 powertrain bench validation with a CAN fault-injection framework.</p>
+      <div>
+        <span class="entry-tag">Formula SAE Electric</span>
+        <a class="entry-title" href="projects/venus-ev/">Venus EV</a>
+        <div class="entry-venue">Electrical System Officer · FSAE 2026</div>
+        <div class="entry-links">
+          <a href="projects/venus-ev/">Full write-up</a>
+        </div>
+        <p class="entry-blurb">Colorado's first Formula SAE Electric car. Designed the 324V, 8.64 kWh accumulator from cell level: 90s5p Molicel P50B, segmented pack, HV safety stack, and the fuse-link characterization behind it.</p>
+      </div>
+    </article>
+
+    <article class="entry">
+      <a class="entry-thumb" href="projects/rubicon-ev/" aria-label="Read: Rubicon EV">
+        <img src="assets/img/rubicon.jpg" alt="Rubicon EV with the team at CSU Powerhouse Energy Campus" loading="lazy" />
       </a>
-      <a class="side-card" href="projects/intrepid-ic/">
-        <span class="side-thumb"><img src="assets/img/intrepid.jpg" alt="Intrepid IC on track at a Formula SAE competition" loading="lazy" /></span><div class="side-meta">Assistant Electrical Lead · FSAE 2024 IC</div>
-        <h3>Intrepid IC</h3>
-        <p>Combustion car. Full harness integration across the vehicle and a telemetry control unit for wireless data off the car.</p>
+      <div>
+        <span class="entry-tag">Formula SAE Electric</span>
+        <a class="entry-title" href="projects/rubicon-ev/">Rubicon EV</a>
+        <div class="entry-venue">Chief Engineer · FSAE 2025 EV</div>
+        <div class="entry-links">
+          <a href="projects/rubicon-ev/">Full write-up</a>
+        </div>
+        <p class="entry-blurb">First CSU electric car. Owned the full vehicle electrical architecture: HV and LV interfaces, tractive system active lights, brake plausibility hardware, and PM100 powertrain bench validation with a CAN fault-injection framework.</p>
+      </div>
+    </article>
+
+    <article class="entry">
+      <a class="entry-thumb" href="projects/intrepid-ic/" aria-label="Read: Intrepid IC">
+        <img src="assets/img/intrepid.jpg" alt="Intrepid IC on track at a Formula SAE competition" loading="lazy" />
       </a>
-      <a class="side-card" href="projects/other-projects/">
-        <span class="side-thumb"><img src="assets/projects/other/cybertruck-2.jpg" alt="Automotive cybersecurity work on a Cybertruck" loading="lazy" /></span><div class="side-meta">Selected work &middot; 2022 to 2026</div>
-        <h3>Other Projects</h3>
-        <p>Embedded systems, automotive cybersecurity, and the two CSU combustion cars that came before the electric program.</p>
+      <div>
+        <span class="entry-tag">Formula SAE Combustion</span>
+        <a class="entry-title" href="projects/intrepid-ic/">Intrepid IC</a>
+        <div class="entry-venue">Assistant Electrical Lead · FSAE 2024 IC</div>
+        <div class="entry-links">
+          <a href="projects/intrepid-ic/">Full write-up</a>
+        </div>
+        <p class="entry-blurb">Combustion car. Full harness integration across the vehicle and a telemetry control unit for wireless data off the car.</p>
+      </div>
+    </article>
+
+    <article class="entry">
+      <a class="entry-thumb" href="projects/other-projects/" aria-label="Read: Other Projects">
+        <img src="assets/projects/other/cybertruck-2.jpg" alt="Automotive cybersecurity work on a Cybertruck" loading="lazy" />
       </a>
-    </div>
+      <div>
+        <span class="entry-tag">Selected work</span>
+        <a class="entry-title" href="projects/other-projects/">Other Projects</a>
+        <div class="entry-venue">Selected work &middot; 2022 to 2026</div>
+        <div class="entry-links">
+          <a href="projects/other-projects/">Full write-up</a>
+        </div>
+        <p class="entry-blurb">Embedded systems, automotive cybersecurity, and the two CSU combustion cars that came before the electric program.</p>
+      </div>
+    </article>
   </section>
 
 </main>

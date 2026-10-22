@@ -210,6 +210,15 @@ a.entry-title:hover { text-decoration: underline; }
 .section-note a { color: var(--orange-deep); border-bottom: 1px solid var(--orange-soft); }
 .section-note a:hover { border-color: var(--orange); }
 
+/* ---------- Group banner ---------- */
+/* One wide image introducing a section that holds several entries. Capped so
+   it sets the scene without pushing the entries below the fold. */
+.group-figure {
+  margin: 0 0 1.6rem; border: 1px solid var(--line); border-radius: var(--radius);
+  overflow: hidden; background: var(--kw-bg); max-width: 560px;
+}
+.group-figure img { display: block; width: 100%; height: auto; }
+
 /* ---------- Secondary work (engineering / Formula Student) ---------- */
 .side-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
 .side-card {
