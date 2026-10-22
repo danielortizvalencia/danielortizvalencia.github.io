@@ -1,6 +1,8 @@
 // Lifted from the engineering portfolio so the data-media galleries
 // render identically here.
 document.querySelectorAll('.sub-photos').forEach((grid) => {
+  // Hand-authored media is already complete; only populate data-driven slots.
+  if (grid.querySelector('.media-slot')) return;
   const label = grid.dataset.label || 'Photo';
   let media = [];
   if (grid.dataset.media) {

@@ -318,66 +318,7 @@
 .pp-embed blockquote { width: 100%; max-width: 550px; margin: 0 auto; }
 .pp-embed figcaption { max-width: 640px; }
 
-
-/* ---------- Ported from the engineering portfolio, so the subsystem
-   blocks render exactly as they do there ---------- */
-.section-head .sub { color: var(--ink-faint); font-size: var(--text-sm); margin-top: .6rem; max-width: 64ch; }
-.interlatent-study.sub:first-of-type { margin-top: 0; border-top: 0; padding: .5rem 0 0; }
-.interlatent-study .sub-text { min-width: 0; }
-.interlatent-study ul { margin: 0; padding-left: 0; }
-.interlatent-study h4:first-of-type { margin-top: 0; }
-.interlatent-media { display: flex; flex-direction: column; gap: 1.4rem; min-width: 0; }
-.diagram-link { display: block; border-radius: 12px; }
-.diagram-link .media-el { max-height: none; background: #fff; cursor: zoom-in; }
-.diagram-link:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
-.evidence-panel { margin: 0; border: 1px solid var(--orange-soft); border-radius: 12px; padding: 1.1rem; background: var(--orange-tint); }
-.evidence-panel > figcaption { font-size: var(--text-sm); font-weight: 700; color: var(--ink); margin-bottom: .8rem; }
-.evidence-table-wrap { overflow-x: auto; }
-.evidence-table { width: 100%; border-collapse: collapse; font-size: var(--text-xs); text-align: left; }
-.evidence-table th, .evidence-table td { padding: .65rem .45rem; vertical-align: top; border-bottom: 1px solid var(--line-strong); }
-.evidence-table thead th { color: var(--orange-deep); }
-.evidence-table tbody th { color: var(--ink); font-weight: 500; }
-.evidence-table tbody tr:last-child > * { border-bottom: 0; }
-.evidence-panel > p { font-size: var(--text-xs); color: var(--ink-faint); margin-top: .8rem; }
-/* ---------- Subproject row (desc left, images right) ---------- */
-.sub {
-  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 3vw, 2.5rem);
-  padding: 1.8rem 0; border-top: 1px dashed var(--line-strong); align-items: start;
-}
-.sub:first-of-type { border-top: 1px solid var(--orange-soft); margin-top: 1rem; }
-.sub-title { font-size: var(--text-lg); font-weight: 700; letter-spacing: -0.01em; margin-bottom: .3rem; }
-.sub-blurb { font-size: var(--text-sm); color: var(--orange-deep); margin-bottom: 1rem; }
-.sub h4 {
-  font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .14em;
-  color: var(--ink-faint); font-weight: 700; margin: 1rem 0 .5rem;
-}
-.sub ul { list-style: none; }
-.sub li { font-size: var(--text-sm); color: var(--ink-soft); padding-left: 1.2rem; position: relative; margin-bottom: .5rem; }
-.sub li::before { content: "▹"; position: absolute; left: 0; color: var(--orange); }
-.sub p { font-size: var(--text-sm); color: var(--ink-soft); }
-.sub-links { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1rem; }
-/* Image column for subproject */
-.sub-photos { display: flex; flex-direction: column; gap: .85rem; position: sticky; top: 100px; }
-.sub-photos.two .photo-slot:first-child { aspect-ratio: 16 / 9; }
-/* Real media (image/video) slots */
-.media-slot { margin: 0; display: flex; flex-direction: column; gap: .4rem; }
-.media-slot .media-el {
-  width: 100%; display: block; border-radius: 12px;
-  border: 1px solid var(--orange-soft); background: var(--orange-tint);
-  object-fit: contain; max-height: 340px;
-}
-.media-slot img.media-el { cursor: zoom-in; }
-.media-slot.is-video .media-el { object-fit: cover; }
-.media-slot figcaption {
-  font-size: var(--text-xs); color: var(--ink-faint); line-height: 1.4; padding: 0 .15rem;
-}
-.sub { grid-template-columns: 1fr; }
-.sub-photos { position: static; flex-direction: row; flex-wrap: wrap; }
-.sub-photos .photo-slot { flex: 1; }
-.sub-photos .media-slot { flex: 1 1 240px; }
-.sub-photos { flex-direction: column; }
-
-/* ---------- Car subsystem blocks, ported ---------- */
+/* ---------- Ported from the engineering portfolio (media queries intact) ---------- */
 .section-head .sub { color: var(--ink-faint); font-size: var(--text-sm); margin-top: .6rem; max-width: 64ch; }
 .kw {
   font-size: var(--text-xs); font-weight: 500; color: var(--ink-soft);
@@ -483,11 +424,9 @@ details.topic .topic-summary { cursor: pointer; }
   letter-spacing: -0.01em;
 }
 .doc-note-body { font-size: var(--text-xs); color: var(--ink-soft); line-height: 1.5; }
-.sub { grid-template-columns: 1fr; }
-.sub-photos { position: static; flex-direction: row; flex-wrap: wrap; }
-.sub-photos .photo-slot { flex: 1; }
-.sub-photos .media-slot { flex: 1 1 240px; }
-.sub-photos { flex-direction: column; }
+@media (max-width: 560px) {
+  .sub-photos { flex-direction: column; }
+}
 .sub li::before { color: var(--ink-faint); }
 .interlatent-media { position: static; gap: .85rem; }
 .interlatent-diagrams { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
