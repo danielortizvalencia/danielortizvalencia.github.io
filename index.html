@@ -29,7 +29,6 @@
   <div class="site-header-inner">
     <nav class="site-nav">
       <a href="#research">Research</a>
-      <a href="#experience">Experience</a>
       <a href="#projects">Projects</a>
       <a href="#engineering">Engineering</a>
     </nav>
@@ -109,6 +108,23 @@
     </article>
 
     <article class="entry">
+      <a class="entry-thumb" href="projects/interlatent/" aria-label="Read: Teleoperation and deployment validation at Interlatent">
+        <img src="assets/img/interlatent.jpg" alt="Illustration: one operator station connected to a fleet of five robot arms" loading="lazy" width="1000" height="625" />
+      </a>
+      <div>
+        <span class="entry-tag">Robot Learning</span>
+        <a class="entry-title" href="projects/interlatent/">Teleoperation and deployment validation for learned policies on physical robots</a>
+        <div class="entry-authors"><span class="me">Daniel Ortiz Valencia</span>, with the Interlatent team</div>
+        <div class="entry-venue">Interlatent, Palo Alto, 2026</div>
+        <div class="entry-links">
+          <a href="projects/interlatent/">Website</a><span class="sep">/</span>
+          <a href="https://github.com/Interlatent/Deployment-Infra" target="_blank" rel="noopener">SDK</a>
+        </div>
+        <p class="entry-blurb">Helping deploy frontier models onto real robots. I scaled VR teleoperation from a single arm to a five-robot fleet, then wrote the profiler that runs on the robot's own node, so the control loop's timing could be measured rather than guessed at.</p>
+      </div>
+    </article>
+
+    <article class="entry">
       <a class="entry-thumb" href="papers/fsds-fusion/" aria-label="Read: Incremental LiDAR-Camera Sensor Fusion">
         <video autoplay src="assets/papers/videos/fsds-fusion/fsds-demo.mp4" muted loop playsinline preload="metadata" width="920" height="518"></video>
       </a>
@@ -159,47 +175,6 @@
         <p class="entry-blurb">YOLO fails silently, returning a confident colour label that is wrong. I labelled 129,025 detections to measure how often, then trained an XGBoost gate that catches about 91% of those errors at under 0.3 ms per frame.</p>
       </div>
     </article>
-  </section>
-
-  <!-- ============ EXPERIENCE ============ -->
-  <section class="section" id="experience">
-    <h2 class="section-title">Experience</h2>
-
-    <div class="xp">
-      <div class="xp-when">2026</div>
-      <div class="xp-body">
-        <h3 class="xp-role"><a href="projects/interlatent/">Interlatent</a> <span class="xp-org">· Palo Alto</span></h3>
-
-        <div class="xp-split">
-          <div>
-            <p class="xp-lede">I helped build the hardware and software infrastructure for deploying frontier models on physical robots.</p>
-
-            <div class="xp-item">
-              <span class="xp-num">01</span>
-              <div>
-                <h4>Teleoperation architecture and hardware integration</h4>
-                <p>Scaled control from a single robot to a five-robot fleet by implementing inverse kinematics and VR teleoperation models. The system supported rapid, distributed deployment on physical hardware.</p>
-              </div>
-            </div>
-
-            <div class="xp-item">
-              <span class="xp-num">02</span>
-              <div>
-                <h4>Agent validation and reliability testing</h4>
-                <p>Designed physical test benches and evaluation matrices to test policy-inference optimization ideas on real robots, with input from NVIDIA and Google engineers.</p>
-              </div>
-            </div>
-          </div>
-
-          <figure class="xp-figure">
-            <a href="projects/interlatent/" aria-label="Read: Teleoperation and Validation at Interlatent">
-              <img src="assets/img/interlatent.jpg" alt="Illustration: one operator station connected to a fleet of five robot arms" loading="lazy" width="1000" height="625" />
-            </a>
-            <figcaption class="xp-figcap"><a href="projects/interlatent/">Read the full write-up &rarr;</a></figcaption>
-          </figure>
-        </div>
-      </div>
-    </div>
   </section>
 
   <!-- ============ PROJECTS ============ -->

@@ -38,9 +38,8 @@
   </header>
   <div class="pp-storynav-wrap">
     <nav class="pp-storynav">
-      <a href="#background">Background</a>
-      <a href="#approach">Technical Approach</a>
-      <a href="#results">Results</a>
+      <a href="#teleop">Teleoperation</a>
+      <a href="#validation">Agent Validation</a>
     </nav>
   </div>
 </div>
@@ -62,87 +61,113 @@
 <section class="pp-section pp-tldr">
   <div class="pp-section-inner">
     <span class="pp-eyebrow">In Short</span>
-    <h2 class="pp-section-title">A teleoperated robot is a recording device, so its timing is a data-quality problem</h2>
+    <h2 class="pp-section-title">Deploying frontier models onto robots that actually move</h2>
     <div class="pp-prose">
-      <p class="pp-lede">When an operator drives a robot in VR, every episode becomes training data for a policy. What the policy later learns is bounded by what the operator could see and do at that moment, so a control loop that misses its period is not a comfort problem, it is a corpus problem. I scaled teleoperation from one robot to a five-robot fleet, and wrote a profiler that runs on the robot's own node so the question could be answered with numbers instead of impressions.</p>
+      <p class="pp-lede">Two pieces of work: the operator path that lets a human drive an arm in VR and have every episode land as training data, and the validation campaign that went looking for where the curation agents break. Both write-ups below are carried over from my engineering portfolio unchanged.</p>
     </div>
   </div>
 </section>
 
-<!-- ============ BACKGROUND ============ -->
-<section id="background" class="pp-section">
+<section id="teleop" class="pp-section">
   <div class="pp-section-inner">
-    <span class="pp-eyebrow">I · Background</span>
-    <h2 class="pp-section-title">One interface, many arms, and a human in the loop</h2>
-    <div class="pp-prose">
-      <p>Interlatent is dataset curation for robotics. Its open-source SDK is the half that stands next to the robots: one interface to roll out a policy, teleoperate, and collect data the same way on every supported arm. The problem it removes is mundane and expensive. An SO-101 takes six joints in degrees with the gripper on nought to a hundred, a YAM takes fourteen in radians with the gripper on nought to one, a Nori takes twelve normalized to plus or minus a hundred. Nothing about the task changed between them, but the control code, the teleop rig, the recorder, and the policy glue all get written again from scratch.</p>
-      <p>Teleoperation here means a human driving the robot in real time, in VR, over the network. The operator opens a page in a Meta Quest browser and their hand becomes the robot's end effector. Its production purpose is remote human demonstration: a session with no policy loaded, where every episode is captured as training data. Engage it part way through a policy rollout instead and the human-driven steps are recorded with their own label, which is what makes intervention data usable rather than merely present.</p>
-      <p>My part of this ran from operator control through to checking what the robots did once a policy was driving them. On the control side I scaled from a single robot to a five-robot fleet.</p>
-    </div>
+    <span class="pp-eyebrow">I &middot; Teleoperation</span>
+    <h2 class="pp-section-title">Operator control across arms that disagree about everything</h2>
+    <div class="sub interlatent-study">
+                <div class="sub-text">
+                  <div class="sub-blurb">Meta Quest / WebXR, browser IK, WebTransport over QUIC, CAN, Jetson &amp; Raspberry Pi</div>
+                  <h4>Background</h4>
+                  <ul>
+                    <li>Collecting robot demonstrations required a responsive operator interface across arms with different kinematics, joint units, gripper ranges, and camera setups. SO-101 uses degrees, YAM uses radians, and NORI uses a normalized joint scale; those differences had to be handled explicitly.</li>
+                    <li>The system also had competing timing requirements: operator commands and camera previews needed to stay fresh, while recorded observations and actions needed to arrive intact for later training.</li>
+                  </ul>
+                  <h4>Technical Approach</h4>
+                  <ul>
+                    <li><b>Hardware bring-up and calibration.</b> I worked through robot drivers, dedicated CAN channels, camera placement, USB bandwidth and power budgets, and host setup on Raspberry Pi 5 and NVIDIA Jetson. I validated the VR-to-IK path in MuJoCo before live hardware testing, checking clutch engagement, joint movement, gripper response, and independent arm control.</li>
+                    <li><b>Controller pose to joint targets.</b> The Quest browser reads WebXR controller poses. Clutch-relative mapping anchors motion to the robot's current pose; damped least-squares IK then computes joint targets from the robot's kinematic model. Frame alignment, tool offsets, damping, and velocity caps determine whether hand motion produces stable, intuitive robot motion.</li>
+                    <li><b>Fresh commands over an imperfect network.</b> Browser and robot dial out to a nearby relay, which pairs them by session and forwards bytes. Repeated QUIC datagrams carry joint targets; sequence numbers remove duplicates and stale commands. Applied-sequence echoes measure command round-trip time using the browser's own clock. Each preview JPEG gets an independent stream so one delayed frame does not stall later frames.</li>
+                    <li><b>Safety at the motors.</b> A command arbiter selects e-stop, teleoperation, hold, or policy control. The node checks freshness, deadman state, joint limits, and velocity, then applies a final per-step clamp before sending actions. Operator takeover flushes queued policy actions so old commands cannot execute after handback.</li>
+                    <li><b>Recording without blocking control.</b> State, executed actions, camera frames, and control-source labels travel on a separate, paced gRPC uplink. A disk spool retains ticks until acknowledgement; the recorder packages them into LeRobot episodes. I also traced stop-to-ready delays to deferred video transcoding and compared live encoding, asynchronous completion, and GPU offload by cost, latency, and implementation risk.</li>
+                    <li><b>Measure each stage.</b> I compared headset and node logs, separating capture time, command time, frame age, loop timing, and missed deadlines. This exposed cases where a near-30 Hz average concealed poor timing headroom or an operator preview falling behind.</li>
+                  </ul>
+                  <h4>Conclusion</h4>
+                  <ul>
+                    <li>Helped integrate a shared teleoperation and recording workflow across different robot embodiments, with hardware-specific configuration and a common execution path.</li>
+                    <li>In the measured YAM sessions, Raspberry Pi and Jetson both averaged about 29 Hz, but the Jetson configuration missed more control deadlines. I documented the difference and recommended checking power/thermal settings and moving capture work off the control thread. These runs compared complete configurations, not isolated processor performance.</li>
+                  </ul>
+                </div>
+                <div class="interlatent-media">
+                  <figure class="media-slot">
+                    <a class="diagram-link" href="../../assets/img/interlatent/teleoperation-architecture.png" target="_blank" rel="noopener" aria-label="Open full-size teleoperation architecture diagram"><img class="media-el" src="../../assets/img/interlatent/teleoperation-architecture.png" alt="Quest browser computes joint targets, a QUIC relay connects both peers, and the robot node enforces safety while a separate gRPC path records episodes." loading="lazy" /></a>
+                    <figcaption>System map: browser-side IK, a thin relay, safety on the robot, and an independent recording uplink. Select the diagram to view full size.</figcaption>
+                  </figure>
+                  <figure class="media-slot">
+                    <a class="diagram-link" href="../../assets/img/interlatent/quic-delivery.png" target="_blank" rel="noopener" aria-label="Open full-size QUIC command and video delivery diagram"><img class="media-el" src="../../assets/img/interlatent/quic-delivery.png" alt="Repeated command datagrams are deduplicated; missing sequence 42 is superseded by 43. Independent JPEG streams let newer frames arrive without waiting for a delayed frame." loading="lazy" /></a>
+                    <figcaption>Why delivery semantics matter: newer commands replace lost ones; an executed-sequence echo measures RTT; independent video streams prevent one late frame from blocking the next.</figcaption>
+                  </figure>
+                  <figure class="evidence-panel">
+                    <figcaption>Measured YAM control-loop comparison</figcaption>
+                    <div class="evidence-table-wrap"><table class="evidence-table">
+                      <thead><tr><th scope="col">Metric</th><th scope="col">Pi 5</th><th scope="col">Jetson</th></tr></thead>
+                      <tbody><tr><th scope="row">Mean loop time</th><td>16.4 ms</td><td>20.8 ms</td></tr><tr><th scope="row">Mean capture time</th><td>9.8 ms</td><td>14.5 ms</td></tr><tr><th scope="row">Achieved tick rate</th><td>29.46 Hz</td><td>29.27 Hz</td></tr><tr><th scope="row">Over-period ticks</th><td>1 / 1,909</td><td>28 / 2,204</td></tr></tbody>
+                    </table></div>
+                    <p>Engaged ticks, configured at 30 Hz. July 18 and 20, 2026 sessions; host and encoding configuration differed.</p>
+                  </figure>
+                  <figure class="media-slot project-demo">
+                    <div class="tweet-mount"><blockquote class="twitter-tweet" data-dnt="true" data-conversation="none"><a href="https://twitter.com/sean_pixel/status/2078247149842968747">Watch the browser VR teleoperation demonstration</a></blockquote></div>
+                    <figcaption>Browser VR teleoperation on Raspberry Pi 5 and bimanual I2RT YAM arms: hand motion becomes joint targets through IK. <a href="https://x.com/sean_pixel/status/2078247149842968747/video/1" target="_blank" rel="noopener">Watch on X &#8599;</a></figcaption>
+                  </figure>
+                </div>
+              </div>
   </div>
 </section>
 
-<!-- ============ TECHNICAL APPROACH ============ -->
-<section id="approach" class="pp-section pp-section--tint">
+<section id="validation" class="pp-section pp-section--tint">
   <div class="pp-section-inner">
-    <span class="pp-eyebrow">II · Technical Approach</span>
-    <h2 class="pp-section-title">Compute the target off the robot, keep the robot dumb and safe</h2>
-
-    <h3 class="pp-subhead">The platform</h3>
-    <div class="pp-prose">
-      <p>The design principle in the SDK is producer in the browser, thin receiver on the robot. Everything that computes a joint target, meaning the VR pose retargeting and the inverse kinematics, runs off the robot. The browser solves IK against a compact kinematic spec that the node itself serves, and the node keeps only a receiver plus the last-hop safety clamp. Joint targets stream over QUIC as unreliable datagrams, because a stale pose is worthless and must never queue behind a newer one; when a datagram genuinely goes missing the node holds the last target rather than extrapolating a motion nobody commanded. All motion, human or policy, converges on the same node-side interface: an absolute joint target, then the safety gate, then the send. Out comes a LeRobot v3.0 dataset with every frame labelled by who was driving it.</p>
-      <p>That architecture is not mine. It is documented in the open-source repository and was built mostly by others on the team; I am describing it because the next part only makes sense against it.</p>
-    </div>
-
-    <figure class="pp-figure pp-embed">
-      <blockquote class="twitter-tweet" data-dnt="true" data-align="center">
-        <p lang="en" dir="ltr">Browser-based VR teleop over a low-latency UDP path, running on a Raspberry Pi 5 with bimanual YAM arms.</p>
-        <a href="https://twitter.com/sean_pixel/status/2078247149842968747">Posted by @sean_pixel, 17 July 2026</a>
-      </blockquote>
-      <figcaption><b>Clip 1.</b> The teleoperation path in use, with the browser solving IK and streaming joint targets. Recorded and posted by <a href="https://x.com/sean_pixel/status/2078247149842968747" target="_blank" rel="noopener">@sean_pixel</a>, not by me.</figcaption>
-    </figure>
-
-    <h3 class="pp-subhead">What I added</h3>
-    <div class="pp-prose">
-      <p>You cannot tune a loop you cannot see. I added a per-session teleoperation profiler that runs on the robot node itself, and wired it into the control loop that actually drives the arm rather than into a test harness alongside it. The distinction matters: a harness measures a loop shaped like the real one, and the gap between those two is exactly where timing bugs live.</p>
-      <p>Two details were deliberate. The profiler is log-first, so a session still yields its numbers when the file it would normally write cannot be opened, which is the situation you are most likely to be in on a robot in a lab. And it runs on the node's own hardware, a Raspberry Pi, rather than on a workstation, because the whole question is what that hardware can sustain.</p>
-      <p>Alongside it I did the continuous-integration work that keeps the package honest about its dependencies: enforcing that imports work without the optional extras installed, and running the test suite on ARM, since ARM is what the robot nodes are.</p>
-    </div>
-
-    <div class="pp-callout">
-      <p>All five of my commits to the open-source SDK are public, and they are the profiler and that CI work. The teleoperation transport, the in-browser IK and the safety gate described above belong to other people on the team.</p>
-    </div>
-
-    <h3 class="pp-subhead">Validating the agent</h3>
-    <div class="pp-prose">
-      <p>The second half of the work was evaluation. I designed physical test benches and evaluation matrices to test policy-inference optimization ideas on real robots, with input from engineers at NVIDIA and Google.</p>
-      <p>The matrix itself was built around one constraint: every comparison varies a single axis. Pairing a baseline dataset against one that holds the task fixed but shortens the episodes isolates sensitivity to episode length; pairing it against a harder task at the same modality isolates task semantics. Get that wrong and a failure has two candidate causes and tells you nothing. Get it right and each failure attributes to exactly one. The blocks covered ingest and scale, whether the system was genuinely reading the frames or writing plausible fiction, temporal and phase reasoning, determinism across repeated runs, cross-clip curation, how cost scaled with clip length, whether it would mutate stored data without being asked, and whether any of it transferred to a task it had not seen.</p>
-    </div>
-
-    <figure class="pp-figure pp-embed">
-      <blockquote class="twitter-tweet" data-dnt="true" data-align="center">
-        <p lang="en" dir="ltr">A thousand episodes densely annotated by the agent in about ten minutes, driven from the batch view.</p>
-        <a href="https://twitter.com/sean_pixel/status/2112276483314184514">Posted by @sean_pixel, 19 October 2026</a>
-      </blockquote>
-      <figcaption><b>Clip 2.</b> The annotation agent running in production on a public thousand-episode dataset. This is the system the matrix above was built to stress, not a recording of the validation itself. Posted by <a href="https://x.com/sean_pixel/status/2112276483314184514" target="_blank" rel="noopener">@sean_pixel</a>.</figcaption>
-    </figure>
-  </div>
-</section>
-
-<!-- ============ RESULTS ============ -->
-<section id="results" class="pp-section">
-  <div class="pp-section-inner">
-    <span class="pp-eyebrow">III · Results</span>
-    <h2 class="pp-section-title">Turning a complaint into a per-stage budget</h2>
-    <div class="pp-prose">
-      <p>The profiler changed the shape of the question. Before it, a slow session was a report that teleoperation felt laggy, which is unfalsifiable and points at nothing. After it, every session produced a per-second record of where the loop's time went, split by stage, on the node that ran it.</p>
-      <p>That made an A/B possible. Holding the robot kind, the configured rate and the schema fixed and changing only the host the node ran on separates two explanations that look identical from the outside: code that is too slow, and a host that is being throttled. Without per-stage numbers from the machine itself, those are indistinguishable, and teams spend days optimizing code to fix a power setting.</p>
-      <p>On the evaluation side, the bench results fed two decisions: whether a given change was ready to deploy, and which integration or reliability issues needed fixing first.</p>
-    </div>
-
-    <div class="pp-callout">
-      <p>The measured numbers from that A/B study, and the figure drawn from them, are held back here pending a check with Interlatent. They are my own report and my own data, but they describe a deployment that is not mine to publish.</p>
-    </div>
+    <span class="pp-eyebrow">II &middot; Agent Validation</span>
+    <h2 class="pp-section-title">Finding where the curation agents break</h2>
+    <div class="sub interlatent-study">
+                <div class="sub-text">
+                  <div class="sub-blurb">Dataset curation agents, visual grounding, temporal consistency &amp; reproducible evaluation</div>
+                  <h4>Background</h4>
+                  <ul>
+                    <li>Interlatent's agents inspect robot recordings, describe task progress, and create annotations used to curate training datasets. A plausible answer is not enough: an incorrect outcome label or unstable phase boundary can change which demonstrations a policy learns from.</li>
+                    <li>I designed a validation campaign to find where these agents break, covering visual hallucinations, temporal drift, repeatability, cost, and unintended changes to stored annotations.</li>
+                  </ul>
+                  <h4>Technical Approach</h4>
+                  <ul>
+                    <li><b>Controlled dataset comparisons.</b> I selected two cloth-folding datasets with different episode lengths and a cable-untangling dataset. This separated sensitivity to clip length from sensitivity to task semantics, while keeping the camera-based manipulation setting comparable.</li>
+                    <li><b>Eight test areas.</b> The test matrix covered ingest and scale, grounding, temporal phases, determinism, project curation, cost and latency, write safety, and generalization. Each check had an explicit prompt, pass criterion, targeted failure mode, and recorded observation.</li>
+                    <li><b>Verify against the recording.</b> I checked answers by scrubbing camera views and examining state tracks, tested false premises, asked the agent how many frames it inspected, and repeated segmentation and outcome prompts on the same episode.</li>
+                    <li><b>Test the full workflow.</b> I tracked tool behavior, annotation versions, cancellation, and cost alongside answer quality. This caught failures that a text-only evaluation would miss, including a description request creating annotations and interrupted jobs continuing to write.</li>
+                    <li><b>Make grading task-aware.</b> In separate episode analysis, I found that short-window progress scores could contradict a successful full episode. I proposed separating terminal success from phase-relative progress, supplying elapsed time and prior-window context, and checking repeated grades before using them to filter data.</li>
+                  </ul>
+                  <h4>Conclusion</h4>
+                  <ul>
+                    <li>Produced an evidence-backed limits log and prioritized recommendations: require visual evidence for observational claims, make annotation writes atomic, propagate cancellation to the underlying job, and stabilize repeated segmentation.</li>
+                    <li>The tests distinguished reliable behavior from fragile behavior: the same folding episode received a stable success verdict across three checks, while its phase segmentation changed substantially. That distinction matters when deciding which outputs can be trusted for dataset curation.</li>
+                  </ul>
+                </div>
+                <div class="interlatent-media">
+                  <figure class="evidence-panel">
+                    <figcaption>What the validation exposed</figcaption>
+                    <div class="evidence-table-wrap"><table class="evidence-table validation-findings">
+                      <thead><tr><th scope="col">Check</th><th scope="col">Recorded observation</th></tr></thead>
+                      <tbody>
+                        <tr><th scope="row">Visual grounding</th><td>Detailed camera descriptions followed by an admission that zero frames had been inspected.</td></tr>
+                        <tr><th scope="row">Repeatability</th><td>The same clip's phase track changed from 6 spans to fragmented outputs, then 8 and 16 spans across attempts.</td></tr>
+                        <tr><th scope="row">Write isolation</th><td>A request to describe a clip also created a stored annotation track.</td></tr>
+                        <tr><th scope="row">Cancellation</th><td>Annotation versions continued changing after the foreground run was stopped or errored.</td></tr>
+                        <tr><th scope="row">Stable outcome</th><td>Three repeated success/failure checks agreed on the folding episode's successful outcome.</td></tr>
+                      </tbody>
+                    </table></div>
+                    <p>Selected observations from my agent-validation workbook. Proposed root causes and fixes were tracked separately from observed behavior.</p>
+                  </figure>
+                  <figure class="media-slot project-demo">
+                    <div class="tweet-mount"><blockquote class="twitter-tweet" data-dnt="true" data-conversation="none"><a href="https://twitter.com/sean_pixel/status/2112276483314184514">Watch the robot dataset annotation workflow</a></blockquote></div>
+                    <figcaption>Interlatent product demonstration: importing and annotating robot episodes. This shows the agent workflow evaluated in this project. <a href="https://x.com/sean_pixel/status/2112276483314184514" target="_blank" rel="noopener">Watch on X &#8599;</a></figcaption>
+                  </figure>
+                </div>
+              </div>
   </div>
 </section>
 
