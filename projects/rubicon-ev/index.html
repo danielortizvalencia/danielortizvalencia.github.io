@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script>
+(function () {
+  if (!location.hash) return;
+  window.__ppPendingHash = location.hash;
+  history.replaceState(null, '', location.pathname + location.search);
+})();
+</script>
+<title>Rubicon EV &middot; Daniel Ortiz Valencia</title>
+<meta name="description" content="First CSU EV car, full vehicle electrical architecture & safety systems" />
+<meta property="og:title" content="Rubicon EV" />
+<meta property="og:description" content="First CSU EV car, full vehicle electrical architecture & safety systems" />
+<meta property="og:type" content="article" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../styles.css" />
+<link rel="stylesheet" href="../../assets/papers/paper-page.css" />
+</head>
+<body>
+
+<div class="pp-stickytop">
+  <header class="pp-topbar">
+    <a class="pp-topbar-back" href="../../index.html#engineering"><span class="arrow">&larr;</span> Daniel Ortiz Valencia</a>
+    <div class="pp-topbar-actions">
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <span class="theme-icon-sun" aria-hidden="true">&#9728;</span><span class="theme-icon-moon" aria-hidden="true">&#9790;</span>
+      </button>
+    </div>
+  </header>
+  <div class="pp-storynav-wrap">
+    <nav class="pp-storynav">
+      <a href="#formula-sae-electric-vehicle-system-arch">Formula SAE Electric Vehicle System Architecture</a>
+      <a href="#tractive-system-active-lights">Tractive System Active Lights</a>
+      <a href="#brake-system-plausibility-design">Brake System Plausibility Design</a>
+      <a href="#battery-pack-structure">Battery Pack Structure</a>
+      <a href="#electrical-powertrain-set-up">Electrical Powertrain Set-Up</a>
+    </nav>
+  </div>
+</div>
+
+<section class="pp-hero">
+  <img src="../../assets/projects/rubicon/thumb.jpg" alt="Rubicon EV" width="1600" height="1000" />
+  <div class="pp-hero-content">
+    <div class="pp-hero-badges">
+      <span class="pp-badge is-orange">FSAE 2025 EV</span><span class="pp-badge">Chief Engineer</span>
+    </div>
+    <h1 class="pp-hero-title">Rubicon EV</h1>
+    <p class="pp-hero-sub">First CSU EV car, full vehicle electrical architecture & safety systems</p>
+  </div>
+</section>
+
+<section class="pp-section">
+  <div class="pp-section-inner">
+<div class="car-body">
+        <p class="car-intro">As Chief Engineer of CSU's first electric car, I owned the full vehicle architecture and supported the powertrain and suspension teams, managing timelines across six mechanical and electrical subteams to deliver the first FSAE EV prototype in the Rocky Mountain region.</p>
+
+        <div class="sub">
+          <div class="sub-text">
+            <div class="sub-title" id="formula-sae-electric-vehicle-system-arch">Formula SAE Electric Vehicle System Architecture</div>
+            <div class="sub-blurb">Full HV, LV &amp; safety architecture, bench-testable before integration</div>
+            <h4>Context</h4><ul>
+              <li>Integrated HV powertrain and LV controls into one vehicle-level design meeting FSAE shutdown and safety requirements.</li>
+              <li>Coordinated interfaces across inverter PM100DX, Orion VMS2, accumulator, and vehicle controls with mixed signal types.</li>
+              <li>Needed a bench-testable architecture to validate interlocks and communication before accumulator integration.</li>
+            </ul>
+            <h4>Technical Approach</h4><ul>
+              <li>Engineered full HV, LV, and safety system architecture and interfaces.</li>
+              <li>Defined shutdown, interlock, and communication paths (CAN, analog, digital).</li>
+              <li>Created complete KiCad schematics from component datasheets.</li>
+            </ul>
+            <h4>Results</h4><ul>
+              <li>Delivered complete electrical schematics used by all subteams.</li>
+              <li>Enabled bench testing of HV, LV, and safety interactions before vehicle integration.</li>
+              <li>Reduced integration risk during first high-voltage power-up.</li>
+            </ul>
+          </div>
+          <div class="sub-photos" data-label="System architecture" data-media='[{"src":"../../assets/projects/rubicon/sysarch.svg","caption":"Full vehicle electrical system architecture, power distribution, safety interlocks and CAN topology (KiCad)."},{"src":"../../assets/projects/rubicon/systemarchitecture.jpg","caption":"PM100DX powertrain wiring diagram, 12VDC converters, cooling pump, APPS/brake, resolver, EMRAX, precharge relay, AIRs and J1/J2 connector pinouts."}]'></div>
+        </div>
+
+        <div class="sub">
+          <div class="sub-text">
+            <div class="sub-title" id="tractive-system-active-lights">Tractive System Active Lights</div>
+            <div class="sub-blurb">Galvanically isolated HV/LV PCB, 60V threshold detection &amp; 555 blink timing</div>
+            <h4>Context</h4><ul>
+              <li>FSAE rules require visible HV indication: solid red above 60V DC (live), blinking green below 60V (safe), incorrect indication is immediate disqualification.</li>
+            </ul>
+            <h4>Approach</h4><ul>
+              <li>Split the PCB into galvanically isolated HV and LV sections with a 0.3mm creepage barrier, isolated DC-DC converter, and optocoupler relay; HV side uses a resistor divider for comparator threshold detection, LV side drives a 555 timer for the green blink and red enable logic.</li>
+            </ul>
+            <h4>Results</h4><ul>
+              <li>Delivered KiCad schematic and PCB layout with clear HV/LV boundary marking, comparator-based 60V detection, and 555-based blink timing meeting FSAE visibility and frequency requirements.</li>
+            </ul>
+          </div>
+          <div class="sub-photos" data-label="Active lights PCB" data-media='[{"src":"../../assets/projects/rubicon/lights-1.jpg","caption":"Active-lights driver board layout, isolated high-voltage and low-voltage domains with comparator-based 60V detection."},{"src":"../../assets/projects/rubicon/lights-2.svg","caption":"Active-lights schematic, 555-based blink timing meeting FSAE visibility and frequency requirements (KiCad)."}]'></div>
+        </div>
+
+        <div class="sub">
+          <div class="sub-text">
+            <div class="sub-title" id="brake-system-plausibility-design">Brake System Plausibility Design</div>
+            <div class="sub-blurb">Hardware brake/throttle conflict detection, latched shutdown, all fault modes tested</div>
+            <h4>Background</h4><ul>
+              <li>FSAE rules require hardware-based detection of simultaneous brake and throttle, if accelerator exceeds threshold while braking, the system must open shutdown and latch the fault until manual reset; software-only solutions are prohibited.</li>
+            </ul>
+            <h4>Technical Approach</h4><ul>
+              <li>Partitioned the circuit into independent brake and accelerator monitoring sections, each with LM393 comparators checking voltage bounds and signal-loss via pull-up resistors.</li>
+              <li>Combined fault conditions through logic gates (74AHC1G02) feeding a latched relay driver (TLP241A); included test points (TP1 to TP9) for calibration and fault injection.</li>
+            </ul>
+            <h4>Results</h4><ul>
+              <li>Completed schematic, PCB layout, and 3D model in KiCad; bench-tested all fault modes confirming correct latch behavior and that shutdown opens within timing requirements.</li>
+            </ul>
+          </div>
+          <div class="sub-photos" data-label="Brake plausibility" data-media='[{"src":"../../assets/projects/rubicon/brake-1.jpg","caption":"Brake-system plausibility PCB, independent brake and accelerator monitoring sections."},{"src":"../../assets/projects/rubicon/brake-2.jpg","caption":"Board layout detail with test points (TP1 to TP9) for calibration and fault injection."},{"src":"../../assets/projects/rubicon/brake-3.svg","caption":"Plausibility-detection schematic, LM393 comparators feeding a latched relay driver."}]'></div>
+        </div>
+
+        <div class="sub">
+          <div class="sub-text">
+            <div class="sub-title" id="battery-pack-structure">Battery Pack Structure</div>
+            <div class="sub-blurb">First CSU EV accumulator, 180V, 4.1kWh pack, 50 pre-made modules</div>
+            <h4>Background</h4><ul>
+              <li>First EV accumulator for CSU required integrating 50 pre-made 8p modules (CIE Solutions Lithium Block, Molicel P28A) into a structural container meeting FSAE flame-retardant, isolation, and serviceability requirements, no prior team knowledge existed.</li>
+            </ul>
+            <h4>Technical Approach</h4><ul>
+              <li>Collaborated with a mechanical engineer to define the container: 1018 cold-rolled steel welded enclosure, Garolite G10 interior for HV isolation, laser-cut acrylic module cases, and 9200FR flame-retardant epoxy for bonding.</li>
+            </ul>
+            <h4>Results</h4><ul>
+              <li>Delivered a functional 180V, 4.1kWh pack integrated with Orion BMS 2 and safety electronics; directly informed next-gen 90s5p pack design decisions.</li>
+            </ul>
+            <div class="sub-links">
+              <a class="btn ghost" href="#" data-attachment="Accumulator_Design_RAM_RACING_2025.pdf">📄 Accumulator Design Report (PDF)</a>
+            </div>
+          </div>
+          <div class="sub-photos" data-label="Battery pack structure" data-media='[{"src":"../../assets/projects/rr26ev/struct-1.jpg","caption":"Module / segment containment geometry, 50 pre-made 8p modules in a welded steel enclosure with Garolite isolation."},{"src":"../../assets/projects/rr26ev/struct-2.jpg","caption":"Pack structure detail, keyed busbars and press-fit module retention for the 180V, 4.1kWh accumulator."}]'></div>
+        </div>
+
+        <div class="sub">
+          <div class="sub-text">
+            <div class="sub-title" id="electrical-powertrain-set-up">Electrical Powertrain Set-Up</div>
+            <div class="sub-blurb">PM100 bench validation, CAN fault-injection framework, thermal derating</div>
+            <h4>Background</h4><ul>
+              <li>Before integration, the motor controller (PM100) and motor must be validated on bench to verify startup sequencing, fault responses, thermal behavior, and CAN communication, an untested HV powertrain in-vehicle risks damage to drivetrain and safety systems.</li>
+            </ul>
+            <h4>Technical Approach</h4><ul>
+              <li>Built a benchtop test stand with isolated mounting, an E-stop killing both LV and HV, a precharge circuit with manual contactor sequencing, and an independent cooling loop; developed a systematic startup procedure (LV → CAN active → precharge → main contactor → zero-throttle verify → incremental torque).</li>
+              <li>Created a CAN test framework to inject faults (CAN dropout, throttle loss, simulated overtemp, undervoltage) and verify controller behavior; logged DC bus voltage, temps, torque command vs. actual, and coolant delta-T.</li>
+            </ul>
+            <h4>Results</h4><ul>
+              <li>Validated a repeatable startup sequence, confirmed all fault-injection cases trigger expected shutdown, and established thermal derating thresholds; system ready for vehicle integration with a known operating envelope.</li>
+            </ul>
+          </div>
+          <div class="sub-photos" data-label="Powertrain bench" data-media='[{"src":"../../assets/projects/rubicon/powertrain.mp4","type":"video","caption":"PM100 powertrain bench validation, startup sequencing and fault-injection testing."}]'></div>
+        </div>
+      </div>
+  </div>
+</section>
+
+<section class="pp-section pp-close">
+  <div class="pp-section-inner">
+    <div class="pp-prose">
+      <p><a href="../../index.html#engineering">Back to the rest of my work</a></p>
+    </div>
+  </div>
+</section>
+
+<script src="../../assets/papers/project-gallery.js"></script>
+<script src="../../assets/papers/paper-page.js"></script>
+</body>
+</html>

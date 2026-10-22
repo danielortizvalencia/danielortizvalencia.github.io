@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script>
+(function () {
+  if (!location.hash) return;
+  window.__ppPendingHash = location.hash;
+  history.replaceState(null, '', location.pathname + location.search);
+})();
+</script>
+<title>Other Projects &middot; Daniel Ortiz Valencia</title>
+<meta name="description" content="Selected work, embedded systems, automotive cybersecurity & early CSU race cars" />
+<meta property="og:title" content="Other Projects" />
+<meta property="og:description" content="Selected work, embedded systems, automotive cybersecurity & early CSU race cars" />
+<meta property="og:type" content="article" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../styles.css" />
+<link rel="stylesheet" href="../../assets/papers/paper-page.css" />
+</head>
+<body>
+
+<div class="pp-stickytop">
+  <header class="pp-topbar">
+    <a class="pp-topbar-back" href="../../index.html#engineering"><span class="arrow">&larr;</span> Daniel Ortiz Valencia</a>
+    <div class="pp-topbar-actions">
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <span class="theme-icon-sun" aria-hidden="true">&#9728;</span><span class="theme-icon-moon" aria-hidden="true">&#9790;</span>
+      </button>
+    </div>
+  </header>
+  <div class="pp-storynav-wrap">
+    <nav class="pp-storynav">
+      <a href="#sophomore-competition-winner">Sophomore Competition Winner</a>
+      <a href="#cybertruck-challenge">Cybertruck Challenge</a>
+      <a href="#endeavour-ic">Endeavour IC</a>
+      <a href="#dauntless-ic">Dauntless IC</a>
+    </nav>
+  </div>
+</div>
+
+<section class="pp-hero">
+  <img src="../../assets/projects/other/cybertruck-2.jpg" alt="Other Projects" width="1600" height="1000" />
+  <div class="pp-hero-content">
+    <div class="pp-hero-badges">
+      <span class="pp-badge is-orange">Various</span>
+    </div>
+    <h1 class="pp-hero-title">Other Projects</h1>
+    <p class="pp-hero-sub">Selected work, embedded systems, automotive cybersecurity & early CSU race cars</p>
+  </div>
+</section>
+
+<section class="pp-section">
+  <div class="pp-section-inner">
+<div class="car-body">
+        <p class="car-intro">A few standout projects beyond my lead Formula SAE roles, from a competition-winning embedded clock and heavy-vehicle cybersecurity to the early CSU race cars where I cut my teeth on harnesses and vehicle instrumentation.</p>
+
+        <div class="sub">
+          <div class="sub-text">
+            <div class="sub-title" id="sophomore-competition-winner">Sophomore Competition Winner</div>
+            <div class="sub-blurb">Mechanical seven-segment clock, ESP32, WiFi UI, servo control</div>
+            <h4>Background</h4><ul>
+              <li>The competition required a functional electromechanical product from concept to prototype; the team chose a mechanical seven-segment clock combining PCB design, embedded firmware, servo control, and wireless connectivity.</li>
+            </ul>
+            <h4>Technical Approach</h4><ul>
+              <li>Supported PCB implementation: ESP32-WROOM selection (integrated WiFi, GPIO for servos, low cost), USB-C power/programming, and overcurrent protection sizing for servo stall.</li>
+              <li>Developed a web-based control interface hosted on the ESP32 for setting time and alarm, with servo PWM control to flip mechanical segments.</li>
+            </ul>
+            <h4>Results</h4><ul>
+              <li>Won the sophomore engineering competition; contributed across the full product cycle from component selection to working prototype.</li>
+            </ul>
+          </div>
+          <div class="sub-photos" data-label="Seven-segment clock" data-media='[{"src":"../../assets/projects/other/clock.mp4","type":"video","caption":"Mechanical seven-segment clock in motion, servo-driven flipping segments."},{"src":"../../assets/projects/other/clock-1.jpg","caption":"Assembled clock prototype."},{"src":"../../assets/projects/other/clock-2.jpg","caption":"Build detail, ESP32 control board and servo-actuated segments."}]'></div>
+        </div>
+
+        <div class="sub">
+          <div class="sub-text">
+            <div class="sub-title" id="cybertruck-challenge">Cybertruck Challenge</div>
+            <div class="sub-blurb">Heavy-vehicle cybersecurity, CAN/J1939 analysis, UDS, ~50 selected nationwide</div>
+            <h4>Background</h4><ul>
+              <li>Selected as one of ~50 participants nationwide for week-long hands-on cybersecurity training on commercial heavy-duty trucks; mentored by engineers from Bosch, PACCAR, Daimler, and NMFTA.</li>
+            </ul>
+            <h4>Technical Approach</h4><ul>
+              <li>Captured CAN traffic with Wireshark to map arbitration IDs to source ECUs across the J1939 protocol.</li>
+              <li>Developed brute-force scripts targeting the UDS Security Access seed/key challenge to probe the authentication mechanism.</li>
+              <li>Scripted replay and spoofing attacks with crafted CAN frames; tested which sequences triggered state changes vs. plausibility-check rejections.</li>
+            </ul>
+            <h4>Results</h4><ul>
+              <li>Specific findings under NDA; demonstrated automotive network analysis, diagnostic protocol enumeration, and scripted attack methodology on production heavy vehicles.</li>
+            </ul>
+          </div>
+          <div class="sub-photos" data-label="Cybertruck Challenge" data-media='[{"src":"../../assets/projects/other/cybertruck-2.jpg","caption":"Cybertruck Challenge cohort in front of the heavy-duty trucks used for hands-on training."},{"src":"../../assets/projects/other/cybertruck-1.jpg","caption":"Cybertruck Challenge, hands-on heavy-vehicle cybersecurity training (~50 selected nationwide)."}]'></div>
+        </div>
+
+        <div class="sub">
+          <div class="sub-text">
+            <div class="sub-title" id="endeavour-ic">Endeavour IC</div>
+            <div class="sub-blurb">CSU's first combustion car, wiring harness, electronics placement &amp; MoTeC first start</div>
+            <h4>Background</h4><ul>
+              <li>Endeavour was the first internal combustion car at Colorado State University, with no inherited electrical design to build from.</li>
+            </ul>
+            <h4>Technical Approach</h4><ul>
+              <li>Built the vehicle wiring harness, laid out electronics placement on the chassis, and tested every circuit before commissioning the engine on a MoTeC ECU.</li>
+            </ul>
+            <h4>Results</h4><ul>
+              <li>Successfully started and ran the car, establishing the electrical foundation every later CSU Formula SAE vehicle was built on.</li>
+            </ul>
+          </div>
+          <div class="sub-photos" data-label="Endeavour IC" data-media='[{"src":"../../assets/projects/other/endeavour-1.jpg","caption":"Endeavour IC, the first internal combustion Formula SAE car at Colorado State University."}]'></div>
+        </div>
+
+        <div class="sub">
+          <div class="sub-text">
+            <div class="sub-title" id="dauntless-ic">Dauntless IC</div>
+            <div class="sub-blurb">Summer strain-gauge campaign, turning Intrepid track data into suspension &amp; powertrain design loads</div>
+            <h4>Background</h4><ul>
+              <li>The suspension and powertrain teams needed measured load data, not just assumptions, to design Dauntless, so over the summer I instrumented the Intrepid IC car to capture how it was actually loaded on track.</li>
+            </ul>
+            <h4>Technical Approach</h4><ul>
+              <li>Bonded strain gauges to suspension members and driveline components in Wheatstone-bridge configurations, calibrated each channel to engineering units, and logged the bridge outputs synchronized with vehicle CAN data so strain could be tied to cornering, braking, and acceleration events.</li>
+            </ul>
+            <h4>Results</h4><ul>
+              <li>Converted real track strain into peak and fatigue load cases that fed the Dauntless suspension geometry and informed predicted powertrain loads, replacing guesswork with measured design inputs.</li>
+            </ul>
+          </div>
+          <div class="sub-photos" data-label="Dauntless IC" data-media='[{"src":"../../assets/projects/other/dauntless-1.jpg","caption":"Dauntless IC under dynamic event inspection, the car informed by strain-gauge data measured on Intrepid."}]'></div>
+        </div>
+
+      </div>
+  </div>
+</section>
+
+<section class="pp-section pp-close">
+  <div class="pp-section-inner">
+    <div class="pp-prose">
+      <p><a href="../../index.html#engineering">Back to the rest of my work</a></p>
+    </div>
+  </div>
+</section>
+
+<script src="../../assets/papers/project-gallery.js"></script>
+<script src="../../assets/papers/paper-page.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script>
+(function () {
+  if (!location.hash) return;
+  window.__ppPendingHash = location.hash;
+  history.replaceState(null, '', location.pathname + location.search);
+})();
+</script>
+<title>Intrepid IC &middot; Daniel Ortiz Valencia</title>
+<meta name="description" content="Combustion car, full harness integration & wireless telemetry" />
+<meta property="og:title" content="Intrepid IC" />
+<meta property="og:description" content="Combustion car, full harness integration & wireless telemetry" />
+<meta property="og:type" content="article" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../styles.css" />
+<link rel="stylesheet" href="../../assets/papers/paper-page.css" />
+</head>
+<body>
+
+<div class="pp-stickytop">
+  <header class="pp-topbar">
+    <a class="pp-topbar-back" href="../../index.html#engineering"><span class="arrow">&larr;</span> Daniel Ortiz Valencia</a>
+    <div class="pp-topbar-actions">
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <span class="theme-icon-sun" aria-hidden="true">&#9728;</span><span class="theme-icon-moon" aria-hidden="true">&#9790;</span>
+      </button>
+    </div>
+  </header>
+  <div class="pp-storynav-wrap">
+    <nav class="pp-storynav">
+      <a href="#vehicle-wiring-integration">Vehicle Wiring Integration</a>
+      <a href="#telemetry-control-unit">Telemetry Control Unit</a>
+    </nav>
+  </div>
+</div>
+
+<section class="pp-hero">
+  <img src="../../assets/projects/intrepid/thumb.jpg" alt="Intrepid IC" width="1600" height="1000" />
+  <div class="pp-hero-content">
+    <div class="pp-hero-badges">
+      <span class="pp-badge is-orange">FSAE 2024 IC</span><span class="pp-badge">Assistant Electrical Lead</span>
+    </div>
+    <h1 class="pp-hero-title">Intrepid IC</h1>
+    <p class="pp-hero-sub">Combustion car, full harness integration & wireless telemetry</p>
+  </div>
+</section>
+
+<section class="pp-section">
+  <div class="pp-section-inner">
+<div class="car-body">
+        <p class="car-intro">On the combustion car, our two-person electrical team delivered the full vehicle harness and a wireless telemetry unit, the foundation that later grew into sensor fusion and autonomous work.</p>
+
+        <div class="sub">
+          <div class="sub-text">
+            <div class="sub-title" id="vehicle-wiring-integration">Vehicle Wiring Integration</div>
+            <div class="sub-blurb">Haltech Nexus R5 + 30 sensors, full harness mapped in RapidHarness</div>
+            <h4>Background</h4><ul>
+              <li>FSAE combustion vehicle requires integration of an ECU (Haltech Nexus R5), transmission control unit, custom Raspberry Pi display, and 30+ sensors into one harness, wiring errors cause no-start, sensor faults, or fire risk.</li>
+            </ul>
+            <h4>Technical Approach</h4><ul>
+              <li>Mapped complete electrical architecture in RapidHarness: wire routing by zone, harness segment lengths, connector pinouts (Deutsch, DTM), and color-coded circuits; documented every ECU input.</li>
+              <li>Defined a CAN bus architecture connecting ECU, TCU (servo clutch, solenoid shift), and Raspberry Pi display; mapped CAN message IDs.</li>
+              <li>Integrated vehicle dynamics sensors (linear pots, wheel speed, throttle, brake pressure) with headroom for future strain gauges and steering torque sensors.</li>
+            </ul>
+            <h4>Results</h4><ul>
+              <li>Delivered complete wiring documentation enabling repeatable harness builds; established the CAN protocol map used by the telemetry system; harness supports trackside serviceability with labeled service connectors.</li>
+            </ul>
+            <div class="sub-links">
+              <a class="btn ghost" href="../../assets/docs/Nexus_R5_Wiring_Diagram.pdf" target="_blank" rel="noopener">📄 Nexus R5 Wiring Diagram (PDF)</a>
+            </div>
+          </div>
+          <div class="sub-photos" data-label="Wiring integration" data-media='[{"src":"../../assets/projects/intrepid/wiring-1.jpg","caption":"Full vehicle harness mapped in RapidHarness, routing, segment lengths and connector pinouts."},{"src":"../../assets/projects/intrepid/wiring-2.jpg","caption":"Harness integration detail, Haltech Nexus R5 and 30+ sensors."},{"src":"../../assets/projects/intrepid/wiring-3.jpg","caption":"Installed vehicle wiring with labeled service connectors for trackside serviceability."}]'></div>
+        </div>
+
+        <div class="sub">
+          <div class="sub-text">
+            <div class="sub-title" id="telemetry-control-unit">Telemetry Control Unit</div>
+            <div class="sub-blurb">Teensy + XBee wireless telemetry, ECU + IMU broadcast at ~300m range</div>
+            <h4>Background</h4><ul>
+              <li>Real-time vehicle data was needed at pit for driver coaching and fault diagnosis; a wired connection was impractical, requiring a wireless system with ~300m range and a meaningful update rate.</li>
+            </ul>
+            <h4>Technical Approach</h4><ul>
+              <li>Selected Teensy for CAN support and speed to parse Haltech ECU broadcasts at 500 kbps; designed power regulation stepping 12V to 3.3V/5V rails with filtering for high-EMI noise immunity.</li>
+              <li>Integrated a BMI270 6-axis IMU for yaw rate and acceleration; implemented an XBee 2.4GHz radio (~250 kbps, ~300m range); architected for future sensor fusion and autonomous development.</li>
+            </ul>
+            <h4>Results</h4><ul>
+              <li>Delivered a functional telemetry PCB (EasyEDA schematic, fabricated board) broadcasting ECU and IMU data wirelessly; documented range/bandwidth tradeoffs vs. LoRa and cellular.</li>
+            </ul>
+          </div>
+          <div class="sub-photos" data-label="Telemetry unit" data-media='[{"src":"../../assets/projects/intrepid/telemetry-1.jpg","caption":"Telemetry control unit PCB, Teensy + XBee, power regulation and BMI270 IMU."},{"src":"../../assets/projects/intrepid/telemetry-2.jpg","caption":"Board layout detail, CAN interface and 2.4GHz radio section."}]'></div>
+        </div>
+      </div>
+  </div>
+</section>
+
+<section class="pp-section pp-close">
+  <div class="pp-section-inner">
+    <div class="pp-prose">
+      <p><a href="../../index.html#engineering">Back to the rest of my work</a></p>
+    </div>
+  </div>
+</section>
+
+<script src="../../assets/papers/project-gallery.js"></script>
+<script src="../../assets/papers/paper-page.js"></script>
+</body>
+</html>
