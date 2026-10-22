@@ -29,8 +29,6 @@
   <div class="site-header-inner">
     <nav class="site-nav">
       <a href="#research">Research</a>
-      <a href="#interlatent">Interlatent</a>
-      <a href="#projects">Projects</a>
       <a href="#engineering">Engineering</a>
     </nav>
     <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
@@ -162,70 +160,28 @@
     </article>
   </section>
 
-  <!-- ============ INTERLATENT ============ -->
-  <section class="section" id="interlatent">
-    <h2 class="section-title">Interlatent</h2>
-    <p class="section-note">Robotics Engineer Intern, Palo Alto, June 2026 to present. Building the hardware and software infrastructure for deploying frontier models onto physical robots. <a href="projects/interlatent/">Full write-up</a> &middot; <a href="https://github.com/Interlatent/Deployment-Infra" target="_blank" rel="noopener">SDK</a></p>
-
-    <figure class="group-figure">
-      <a href="projects/interlatent/" aria-label="Read the full Interlatent write-up">
-        <img src="assets/img/interlatent.jpg" alt="Illustration: one operator station connected to a fleet of five robot arms" loading="lazy" width="1000" height="625" />
-      </a>
-    </figure>
-
-    <article class="entry">
-      <a class="entry-thumb" href="projects/interlatent/#teleop" aria-label="Read: inverse kinematics and VR teleoperation">
-        <img src="assets/projects/interlatent/teleoperation-architecture.png" alt="System map: browser-side IK, a thin relay, and safety enforced on the robot" loading="lazy" />
-      </a>
-      <div>
-        <span class="entry-tag">Teleoperation</span>
-        <a class="entry-title" href="projects/interlatent/#teleop">Inverse kinematics and VR teleoperation across a robot fleet</a>
-        <div class="entry-authors"><span class="me">Daniel Ortiz Valencia</span>, with the Interlatent team</div>
-        <div class="entry-venue">Interlatent, 2026</div>
-        <p class="entry-blurb">The Quest browser reads controller poses; clutch-relative mapping anchors motion to the robot's current pose, and damped least-squares IK turns it into joint targets. Scaled from a single arm to a five-robot fleet, across arms that disagree on joint units and gripper ranges.</p>
-      </div>
-    </article>
-
-    <article class="entry">
-      <a class="entry-thumb" href="projects/interlatent/#validation" aria-label="Read: validating the curation agents">
-        <img src="assets/thumbs/validation.jpg" alt="Illustration: an evaluation matrix with some cells passing and some flagged" loading="lazy" width="1000" height="625" />
-      </a>
-      <div>
-        <span class="entry-tag">Evaluation</span>
-        <a class="entry-title" href="projects/interlatent/#validation">Validating dataset curation agents against the recordings themselves</a>
-        <div class="entry-authors"><span class="me">Daniel Ortiz Valencia</span>, with input from NVIDIA and Google engineers</div>
-        <div class="entry-venue">Interlatent, 2026</div>
-        <p class="entry-blurb">A campaign to find where the agents break: visual hallucination, temporal drift, repeatability, cost, and unintended writes to stored annotations. Datasets were paired so each comparison varied one axis, and every answer was checked against the footage.</p>
-      </div>
-    </article>
-  </section>
-
-  <!-- ============ PROJECTS ============ -->
-  <section class="section" id="projects">
-    <h2 class="section-title">Projects</h2>
-
-    <article class="entry">
-      <a class="entry-thumb" href="https://github.com/danielortval/vr-teleop-kit" target="_blank" rel="noopener" aria-label="VR Teleop Kit on GitHub">
-        <img src="assets/thumbs/teleop.jpg" alt="Illustration: a kinematic chain tracking a commanded pose held ahead of it" loading="lazy" width="1000" height="625" />
-      </a>
-      <div>
-        <span class="entry-tag">Teleoperation</span>
-        <a class="entry-title" href="https://github.com/danielortval/vr-teleop-kit" target="_blank" rel="noopener">VR Teleoperation Kit for Robot Manipulators</a>
-        <div class="entry-authors">Aurel Arnold, <span class="me">Daniel Ortiz Valencia</span>, and contributors</div>
-        <div class="entry-venue">Open source, integrates with LeRobot</div>
-        <div class="entry-links">
-          <a href="https://github.com/danielortval/vr-teleop-kit" target="_blank" rel="noopener">GitHub</a>
-        </div>
-        <p class="entry-blurb">A WebXR page in a Meta Quest streams controller poses to a Python teleoperator that solves differential inverse kinematics against a MuJoCo model of the arm. Drops into LeRobot as a Teleoperator.</p>
-      </div>
-    </article>
-  </section>
-
   <!-- ============ ENGINEERING (secondary) ============ -->
   <section class="section" id="engineering">
     <h2 class="section-title">Engineering</h2>
 
-    <p class="section-note">Vehicle work that came before the research. Each one opens its full write-up, subsystem by subsystem.</p>
+    <p class="section-note">Industry and vehicle work. Each one opens its full write-up, subsystem by subsystem.</p>
+
+    <article class="entry">
+      <a class="entry-thumb entry-thumb--logo" href="projects/interlatent/" aria-label="Read: Interlatent">
+        <img src="assets/projects/interlatent/logo.png" alt="Interlatent" loading="lazy" />
+      </a>
+      <div>
+        <span class="entry-tag">Industry</span>
+        <a class="entry-title" href="projects/interlatent/">Interlatent</a>
+        <div class="entry-venue">Robotics Engineer Intern &middot; Jun 2026 to Present</div>
+        <div class="entry-links">
+          <a href="projects/interlatent/">Full write-up</a><span class="sep">/</span>
+          <a href="https://github.com/Interlatent/Deployment-Infra" target="_blank" rel="noopener">SDK</a>
+        </div>
+        <p class="entry-blurb">Interlatent turns robot demonstrations into training-ready datasets. I worked on teleoperation and agent validation across NORI, Dimensional OS, I2RT YAM, SO-101, and Axol.</p>
+      </div>
+    </article>
+
 
     <article class="entry">
       <a class="entry-thumb" href="projects/venus-ev/" aria-label="Read: Venus EV">

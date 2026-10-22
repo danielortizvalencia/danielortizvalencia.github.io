@@ -4,18 +4,16 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <script>
-// Same hash guard as the other project pages: the native jump fires before the
-// webfont and the embeds settle, so strip it and let paper-page.js re-apply.
 (function () {
   if (!location.hash) return;
   window.__ppPendingHash = location.hash;
   history.replaceState(null, '', location.pathname + location.search);
 })();
 </script>
-<title>Teleoperation and Validation at Interlatent · Daniel Ortiz Valencia</title>
-<meta name="description" content="Driving robots from a VR headset, and instrumenting the control loop on the robot's own hardware to find out whether it holds its timing." />
-<meta property="og:title" content="Teleoperation and Validation at Interlatent" />
-<meta property="og:description" content="Deploying frontier models on physical robots: the teleoperation path, and measuring it where it actually runs." />
+<title>Interlatent &middot; Daniel Ortiz Valencia</title>
+<meta name="description" content="Interlatent turns robot demonstrations into training-ready datasets. I worked on teleoperation and agent validation across NORI, Dimensional OS, I2RT YAM, SO-101, and Axol." />
+<meta property="og:title" content="Interlatent" />
+<meta property="og:description" content="Interlatent turns robot demonstrations into training-ready datasets. I worked on teleoperation and agent validation across NORI, Dimensional OS, I2RT YAM, SO-101, and Axol." />
 <meta property="og:type" content="article" />
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
@@ -28,160 +26,113 @@
 
 <div class="pp-stickytop">
   <header class="pp-topbar">
-    <a class="pp-topbar-back" href="../../index.html#experience"><span class="arrow">←</span> Daniel Ortiz Valencia</a>
+    <a class="pp-topbar-back" href="../../index.html#engineering"><span class="arrow">&larr;</span> Daniel Ortiz Valencia</a>
     <div class="pp-topbar-actions">
-      <a class="pp-btn" href="https://github.com/Interlatent/Deployment-Infra" target="_blank" rel="noopener">SDK ↗</a>
       <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
-        <span class="theme-icon-sun" aria-hidden="true">☀</span><span class="theme-icon-moon" aria-hidden="true">☾</span>
+        <span class="theme-icon-sun" aria-hidden="true">&#9728;</span><span class="theme-icon-moon" aria-hidden="true">&#9790;</span>
       </button>
     </div>
   </header>
   <div class="pp-storynav-wrap">
     <nav class="pp-storynav">
-      <a href="#teleop">Teleoperation</a>
-      <a href="#validation">Agent Validation</a>
+      <a href="#teleoperation-architecture-hardware-inte">Teleoperation Architecture & Hardware Integration</a>
+      <a href="#agent-validation-reliability-testing">Agent Validation & Reliability Testing</a>
     </nav>
   </div>
 </div>
 
-<!-- ============ HERO ============ -->
 <section class="pp-hero pp-hero--diagram">
-  <img src="../../assets/img/interlatent.jpg" alt="Illustration: one operator station connected to a fleet of five robot arms" width="1000" height="625" />
   <div class="pp-hero-content">
     <div class="pp-hero-badges">
-      <span class="pp-badge is-orange">Industry</span>
-      <span class="pp-badge">Interlatent · Palo Alto · 2026</span>
+      <span class="pp-badge is-orange">Jun 2026 to Present</span><span class="pp-badge">Robotics Engineer Intern</span>
     </div>
-    <h1 class="pp-hero-title">Driving robots from a headset, and measuring the loop that carries it</h1>
-    <p class="pp-hero-sub">I helped build the hardware and software infrastructure for deploying frontier models on physical robots. This page covers the teleoperation path and the instrumentation I added to find out whether it holds its timing on the hardware it actually runs on.</p>
+    <h1 class="pp-hero-title">Interlatent</h1>
+    <p class="pp-hero-sub">Robot teleoperation, hardware integration & agent validation</p>
   </div>
 </section>
 
-<!-- ============ TLDR ============ -->
 <section class="pp-section pp-tldr">
   <div class="pp-section-inner">
-    <span class="pp-eyebrow">In Short</span>
-    <h2 class="pp-section-title">Deploying frontier models onto robots that actually move</h2>
-    <div class="pp-prose">
-      <p class="pp-lede">Two pieces of work: the operator path that lets a human drive an arm in VR and have every episode land as training data, and the validation campaign that went looking for where the curation agents break. Both write-ups below are carried over from my engineering portfolio unchanged.</p>
-    </div>
+    <div class="pp-prose"><p class="pp-lede">Interlatent turns robot demonstrations into training-ready datasets. I worked on teleoperation and agent validation across NORI, Dimensional OS, I2RT YAM, SO-101, and Axol.</p></div>
   </div>
 </section>
 
-<section id="teleop" class="pp-section">
+<section class="pp-section">
   <div class="pp-section-inner">
-    <span class="pp-eyebrow">I &middot; Teleoperation</span>
-    <h2 class="pp-section-title">Operator control across arms that disagree about everything</h2>
-    <div class="sub interlatent-study">
-                <div class="sub-text">
-                  <div class="sub-blurb">Meta Quest / WebXR, browser IK, WebTransport over QUIC, CAN, Jetson &amp; Raspberry Pi</div>
-                  <h4>Background</h4>
-                  <ul>
-                    <li>Collecting robot demonstrations required a responsive operator interface across arms with different kinematics, joint units, gripper ranges, and camera setups. SO-101 uses degrees, YAM uses radians, and NORI uses a normalized joint scale; those differences had to be handled explicitly.</li>
-                    <li>The system also had competing timing requirements: operator commands and camera previews needed to stay fresh, while recorded observations and actions needed to arrive intact for later training.</li>
-                  </ul>
-                  <h4>Technical Approach</h4>
-                  <ul>
-                    <li><b>Hardware bring-up and calibration.</b> I worked through robot drivers, dedicated CAN channels, camera placement, USB bandwidth and power budgets, and host setup on Raspberry Pi 5 and NVIDIA Jetson. I validated the VR-to-IK path in MuJoCo before live hardware testing, checking clutch engagement, joint movement, gripper response, and independent arm control.</li>
-                    <li><b>Controller pose to joint targets.</b> The Quest browser reads WebXR controller poses. Clutch-relative mapping anchors motion to the robot's current pose; damped least-squares IK then computes joint targets from the robot's kinematic model. Frame alignment, tool offsets, damping, and velocity caps determine whether hand motion produces stable, intuitive robot motion.</li>
-                    <li><b>Fresh commands over an imperfect network.</b> Browser and robot dial out to a nearby relay, which pairs them by session and forwards bytes. Repeated QUIC datagrams carry joint targets; sequence numbers remove duplicates and stale commands. Applied-sequence echoes measure command round-trip time using the browser's own clock. Each preview JPEG gets an independent stream so one delayed frame does not stall later frames.</li>
-                    <li><b>Safety at the motors.</b> A command arbiter selects e-stop, teleoperation, hold, or policy control. The node checks freshness, deadman state, joint limits, and velocity, then applies a final per-step clamp before sending actions. Operator takeover flushes queued policy actions so old commands cannot execute after handback.</li>
-                    <li><b>Recording without blocking control.</b> State, executed actions, camera frames, and control-source labels travel on a separate, paced gRPC uplink. A disk spool retains ticks until acknowledgement; the recorder packages them into LeRobot episodes. I also traced stop-to-ready delays to deferred video transcoding and compared live encoding, asynchronous completion, and GPU offload by cost, latency, and implementation risk.</li>
-                    <li><b>Measure each stage.</b> I compared headset and node logs, separating capture time, command time, frame age, loop timing, and missed deadlines. This exposed cases where a near-30 Hz average concealed poor timing headroom or an operator preview falling behind.</li>
-                  </ul>
-                  <h4>Conclusion</h4>
-                  <ul>
-                    <li>Helped integrate a shared teleoperation and recording workflow across different robot embodiments, with hardware-specific configuration and a common execution path.</li>
-                    <li>In the measured YAM sessions, Raspberry Pi and Jetson both averaged about 29 Hz, but the Jetson configuration missed more control deadlines. I documented the difference and recommended checking power/thermal settings and moving capture work off the control thread. These runs compared complete configurations, not isolated processor performance.</li>
-                  </ul>
-                </div>
-                <div class="interlatent-media">
-                  <figure class="media-slot">
-                    <a class="diagram-link" href="../../assets/img/interlatent/teleoperation-architecture.png" target="_blank" rel="noopener" aria-label="Open full-size teleoperation architecture diagram"><img class="media-el" src="../../assets/img/interlatent/teleoperation-architecture.png" alt="Quest browser computes joint targets, a QUIC relay connects both peers, and the robot node enforces safety while a separate gRPC path records episodes." loading="lazy" /></a>
-                    <figcaption>System map: browser-side IK, a thin relay, safety on the robot, and an independent recording uplink. Select the diagram to view full size.</figcaption>
-                  </figure>
-                  <figure class="media-slot">
-                    <a class="diagram-link" href="../../assets/img/interlatent/quic-delivery.png" target="_blank" rel="noopener" aria-label="Open full-size QUIC command and video delivery diagram"><img class="media-el" src="../../assets/img/interlatent/quic-delivery.png" alt="Repeated command datagrams are deduplicated; missing sequence 42 is superseded by 43. Independent JPEG streams let newer frames arrive without waiting for a delayed frame." loading="lazy" /></a>
-                    <figcaption>Why delivery semantics matter: newer commands replace lost ones; an executed-sequence echo measures RTT; independent video streams prevent one late frame from blocking the next.</figcaption>
-                  </figure>
-                  <figure class="evidence-panel">
-                    <figcaption>Measured YAM control-loop comparison</figcaption>
-                    <div class="evidence-table-wrap"><table class="evidence-table">
-                      <thead><tr><th scope="col">Metric</th><th scope="col">Pi 5</th><th scope="col">Jetson</th></tr></thead>
-                      <tbody><tr><th scope="row">Mean loop time</th><td>16.4 ms</td><td>20.8 ms</td></tr><tr><th scope="row">Mean capture time</th><td>9.8 ms</td><td>14.5 ms</td></tr><tr><th scope="row">Achieved tick rate</th><td>29.46 Hz</td><td>29.27 Hz</td></tr><tr><th scope="row">Over-period ticks</th><td>1 / 1,909</td><td>28 / 2,204</td></tr></tbody>
-                    </table></div>
-                    <p>Engaged ticks, configured at 30 Hz. July 18 and 20, 2026 sessions; host and encoding configuration differed.</p>
-                  </figure>
-                  <figure class="media-slot project-demo">
-                    <div class="tweet-mount"><blockquote class="twitter-tweet" data-dnt="true" data-conversation="none"><a href="https://twitter.com/sean_pixel/status/2078247149842968747">Watch the browser VR teleoperation demonstration</a></blockquote></div>
-                    <figcaption>Browser VR teleoperation on Raspberry Pi 5 and bimanual I2RT YAM arms: hand motion becomes joint targets through IK. <a href="https://x.com/sean_pixel/status/2078247149842968747/video/1" target="_blank" rel="noopener">Watch on X &#8599;</a></figcaption>
-                  </figure>
-                </div>
-              </div>
+<div class="car-body">
+        <p class="car-intro">Interlatent turns robot demonstrations into training-ready datasets. I worked on teleoperation and agent validation across NORI, Dimensional OS, I2RT YAM, SO-101, and Axol.</p>
+        <div class="sub">
+          <div class="sub-text">
+            <div class="sub-title" id="teleoperation-architecture-hardware-inte">Teleoperation Architecture &amp; Hardware Integration</div>
+            <div class="sub-blurb">WebXR, inverse kinematics, QUIC &amp; robot hardware</div>
+            <h4>Background</h4><ul>
+              <li>Needed a shared teleoperation and recording workflow across robots with different joint units, kinematics, cameras, and onboard computers.</li>
+            </ul>
+            <h4>Technical Approach</h4><ul>
+              <li>Integrated CAN, cameras, and host hardware on Raspberry Pi 5 and Jetson; validated clutch mapping, IK, and independent arm control in MuJoCo before live testing.</li>
+              <li>Traced WebXR poses through browser IK and QUIC delivery to the robot's command arbiter, freshness checks, joint limits, and motion clamps.</li>
+              <li>Evaluated command and camera timing, plus the separate gRPC recording path that spools acknowledged data into LeRobot episodes.</li>
+            </ul>
+            <h4>Results</h4><ul>
+              <li>Helped expand control from one robot to a five-robot fleet through shared interfaces and hardware-specific configuration.</li>
+              <li>Identified capture and encoding bottlenecks and documented changes to improve control timing and recording turnaround.</li>
+            </ul>
+            <div class="sub-links"><a class="btn ghost" href="https://github.com/Interlatent/Deployment-Infra" target="_blank" rel="noopener">Deployment SDK &#8599;</a></div>
+          </div>
+          <div class="sub-photos interlatent-media">
+            <figure class="media-slot">
+              <video class="media-el" controls playsinline preload="metadata" aria-label="Browser VR teleoperation demonstration"><source src="../../assets/projects/interlatent/teleoperation.mp4" type="video/mp4" /></video>
+              <figcaption>Browser VR and inverse kinematics controlling bimanual YAM arms.</figcaption>
+            </figure>
+            <div class="interlatent-diagrams">
+              <figure class="media-slot">
+                <a class="diagram-link" href="../../assets/projects/interlatent/teleoperation-architecture.png" target="_blank" rel="noopener"><img class="media-el" src="../../assets/projects/interlatent/teleoperation-architecture.png" alt="Teleoperation architecture: browser IK, QUIC relay, robot safety and separate recording uplink" loading="lazy" /></a>
+                <figcaption>System architecture. Select to enlarge.</figcaption>
+              </figure>
+              <figure class="media-slot">
+                <a class="diagram-link" href="../../assets/projects/interlatent/quic-delivery.png" target="_blank" rel="noopener"><img class="media-el" src="../../assets/projects/interlatent/quic-delivery.png" alt="Command deduplication and independent video streams over QUIC" loading="lazy" /></a>
+                <figcaption>Command and video delivery. Select to enlarge.</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+        <div class="sub" id="interlatent-validation">
+          <div class="sub-text">
+            <div class="sub-title" id="agent-validation-reliability-testing">Agent Validation &amp; Reliability Testing</div>
+            <div class="sub-blurb">Visual grounding, annotation consistency &amp; workflow reliability</div>
+            <h4>Background</h4><ul>
+              <li>Dataset agents needed to describe robot recordings and annotate task progress accurately before their outputs could guide training-data selection.</li>
+            </ul>
+            <h4>Technical Approach</h4><ul>
+              <li>Built an eight-area test matrix using cloth-folding and cable-untangling datasets, with explicit prompts, pass criteria, and recorded observations.</li>
+              <li>Checked claims against camera frames and state tracks; repeated phase-segmentation and outcome prompts to measure consistency.</li>
+              <li>Tracked annotation versions, cancellation, cost, and unintended writes alongside answer quality.</li>
+            </ul>
+            <h4>Results</h4><ul>
+              <li>Exposed ungrounded visual claims, inconsistent phase boundaries, and background writes after cancellation.</li>
+              <li>Delivered a reproducible failure log and prioritized fixes for visual evidence, write isolation, and cancellation; confirmed stable outcome labels across three repeated checks.</li>
+            </ul>
+          </div>
+          <div class="sub-photos interlatent-media">
+            <figure class="media-slot">
+              <video class="media-el" controls playsinline preload="metadata" aria-label="Interlatent dataset annotation workflow"><source src="../../assets/projects/interlatent/agent-validation.mp4" type="video/mp4" /></video>
+              <figcaption>Interlatent's dataset annotation workflow, the product behavior evaluated in this project.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
   </div>
 </section>
 
-<section id="validation" class="pp-section pp-section--tint">
-  <div class="pp-section-inner">
-    <span class="pp-eyebrow">II &middot; Agent Validation</span>
-    <h2 class="pp-section-title">Finding where the curation agents break</h2>
-    <div class="sub interlatent-study">
-                <div class="sub-text">
-                  <div class="sub-blurb">Dataset curation agents, visual grounding, temporal consistency &amp; reproducible evaluation</div>
-                  <h4>Background</h4>
-                  <ul>
-                    <li>Interlatent's agents inspect robot recordings, describe task progress, and create annotations used to curate training datasets. A plausible answer is not enough: an incorrect outcome label or unstable phase boundary can change which demonstrations a policy learns from.</li>
-                    <li>I designed a validation campaign to find where these agents break, covering visual hallucinations, temporal drift, repeatability, cost, and unintended changes to stored annotations.</li>
-                  </ul>
-                  <h4>Technical Approach</h4>
-                  <ul>
-                    <li><b>Controlled dataset comparisons.</b> I selected two cloth-folding datasets with different episode lengths and a cable-untangling dataset. This separated sensitivity to clip length from sensitivity to task semantics, while keeping the camera-based manipulation setting comparable.</li>
-                    <li><b>Eight test areas.</b> The test matrix covered ingest and scale, grounding, temporal phases, determinism, project curation, cost and latency, write safety, and generalization. Each check had an explicit prompt, pass criterion, targeted failure mode, and recorded observation.</li>
-                    <li><b>Verify against the recording.</b> I checked answers by scrubbing camera views and examining state tracks, tested false premises, asked the agent how many frames it inspected, and repeated segmentation and outcome prompts on the same episode.</li>
-                    <li><b>Test the full workflow.</b> I tracked tool behavior, annotation versions, cancellation, and cost alongside answer quality. This caught failures that a text-only evaluation would miss, including a description request creating annotations and interrupted jobs continuing to write.</li>
-                    <li><b>Make grading task-aware.</b> In separate episode analysis, I found that short-window progress scores could contradict a successful full episode. I proposed separating terminal success from phase-relative progress, supplying elapsed time and prior-window context, and checking repeated grades before using them to filter data.</li>
-                  </ul>
-                  <h4>Conclusion</h4>
-                  <ul>
-                    <li>Produced an evidence-backed limits log and prioritized recommendations: require visual evidence for observational claims, make annotation writes atomic, propagate cancellation to the underlying job, and stabilize repeated segmentation.</li>
-                    <li>The tests distinguished reliable behavior from fragile behavior: the same folding episode received a stable success verdict across three checks, while its phase segmentation changed substantially. That distinction matters when deciding which outputs can be trusted for dataset curation.</li>
-                  </ul>
-                </div>
-                <div class="interlatent-media">
-                  <figure class="evidence-panel">
-                    <figcaption>What the validation exposed</figcaption>
-                    <div class="evidence-table-wrap"><table class="evidence-table validation-findings">
-                      <thead><tr><th scope="col">Check</th><th scope="col">Recorded observation</th></tr></thead>
-                      <tbody>
-                        <tr><th scope="row">Visual grounding</th><td>Detailed camera descriptions followed by an admission that zero frames had been inspected.</td></tr>
-                        <tr><th scope="row">Repeatability</th><td>The same clip's phase track changed from 6 spans to fragmented outputs, then 8 and 16 spans across attempts.</td></tr>
-                        <tr><th scope="row">Write isolation</th><td>A request to describe a clip also created a stored annotation track.</td></tr>
-                        <tr><th scope="row">Cancellation</th><td>Annotation versions continued changing after the foreground run was stopped or errored.</td></tr>
-                        <tr><th scope="row">Stable outcome</th><td>Three repeated success/failure checks agreed on the folding episode's successful outcome.</td></tr>
-                      </tbody>
-                    </table></div>
-                    <p>Selected observations from my agent-validation workbook. Proposed root causes and fixes were tracked separately from observed behavior.</p>
-                  </figure>
-                  <figure class="media-slot project-demo">
-                    <div class="tweet-mount"><blockquote class="twitter-tweet" data-dnt="true" data-conversation="none"><a href="https://twitter.com/sean_pixel/status/2112276483314184514">Watch the robot dataset annotation workflow</a></blockquote></div>
-                    <figcaption>Interlatent product demonstration: importing and annotating robot episodes. This shows the agent workflow evaluated in this project. <a href="https://x.com/sean_pixel/status/2112276483314184514" target="_blank" rel="noopener">Watch on X &#8599;</a></figcaption>
-                  </figure>
-                </div>
-              </div>
-  </div>
-</section>
-
-<!-- ============ CLOSE ============ -->
 <section class="pp-section pp-close">
   <div class="pp-section-inner">
     <div class="pp-prose">
-      <p>The through line from here to the rest of my work is the same one: a learned system is only as good as the evidence you are willing to gather about it, and most of that evidence has to come from the hardware it actually runs on.</p>
-      <p><a href="../../index.html#experience">Back to the rest of my work</a> · <a href="https://github.com/Interlatent/Deployment-Infra" target="_blank" rel="noopener">The open-source SDK ↗</a></p>
+      <p><a href="../../index.html#engineering">Back to the rest of my work</a></p>
     </div>
   </div>
 </section>
 
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script src="../../assets/papers/project-gallery.js"></script>
 <script src="../../assets/papers/paper-page.js"></script>
 </body>
 </html>

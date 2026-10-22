@@ -210,6 +210,12 @@ a.entry-title:hover { text-decoration: underline; }
 .section-note a { color: var(--orange-deep); border-bottom: 1px solid var(--orange-soft); }
 .section-note a:hover { border-color: var(--orange); }
 
+/* ---------- Logo thumbnails ---------- */
+/* A square logo on its own black field: contain it so it is not cropped, and
+   match the thumb background to the artwork so there is no visible seam. */
+.entry-thumb--logo { background: #000; }
+.entry-thumb--logo img { object-fit: contain; padding: .9rem; }
+
 /* ---------- Group banner ---------- */
 /* One wide image introducing a section that holds several entries. Capped so
    it sets the scene without pushing the entries below the fold. */

@@ -377,7 +377,6 @@
 .sub-photos .media-slot { flex: 1 1 240px; }
 .sub-photos { flex-direction: column; }
 
-
 /* ---------- Car subsystem blocks, ported ---------- */
 .section-head .sub { color: var(--ink-faint); font-size: var(--text-sm); margin-top: .6rem; max-width: 64ch; }
 .kw {
@@ -385,10 +384,14 @@
   background: var(--kw-bg); border: 1px solid var(--line-strong);
   padding: .22rem .6rem; border-radius: 6px; letter-spacing: .02em; white-space: nowrap;
 }
-.car[open] .kw { border-color: var(--orange-soft); color: var(--orange-deep); background: var(--orange-tint); }
+.car[open] .kw { border-color: var(--line); color: var(--ink-soft); background: var(--paper); }
 .car-body {
   padding: 0 clamp(1.3rem, 2.5vw, 2rem) clamp(1.6rem, 3vw, 2.4rem);
   border-top: 1px solid var(--line);
+}
+.car-intro {
+  font-size: var(--text-sm); color: var(--ink-soft); padding: 1.4rem 0 .4rem;
+  max-width: 80ch;
 }
 .topic-summary {
   display: flex; align-items: center; gap: .9rem; padding: 1rem 1.15rem;
@@ -398,8 +401,12 @@ details.topic .topic-summary { cursor: pointer; }
 .topic-summary::-webkit-details-marker { display: none; }
 .topic-static .topic-summary { padding-bottom: .45rem; }
 .topic-summary:focus-visible { outline: 2px solid var(--orange); outline-offset: -4px; }
+/* Interlatent case studies use the same text/media rhythm as the vehicle projects. */
+.car-intro-followup { padding-top: .65rem; }
+.interlatent-project .car-meta { max-width: 100%; flex-shrink: 1; }
 .interlatent-study.sub:first-of-type { margin-top: 0; border-top: 0; padding: .5rem 0 0; }
 .interlatent-study .sub-text { min-width: 0; }
+.interlatent-media { display: flex; flex-direction: column; gap: 1.4rem; min-width: 0; }
 .diagram-link { display: block; border-radius: 12px; }
 .diagram-link .media-el { max-height: none; background: #fff; cursor: zoom-in; }
 .diagram-link:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
@@ -419,7 +426,7 @@ details.topic .topic-summary { cursor: pointer; }
 }
 .sub:first-of-type { border-top: 1px solid var(--orange-soft); margin-top: 1rem; }
 .sub-title { font-size: var(--text-lg); font-weight: 700; letter-spacing: -0.01em; margin-bottom: .3rem; }
-.sub-blurb { font-size: var(--text-sm); color: var(--orange-deep); margin-bottom: 1rem; }
+.sub-blurb { font-size: var(--text-sm); color: var(--ink-soft); margin-bottom: 1rem; }
 .sub h4 {
   font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .14em;
   color: var(--ink-faint); font-weight: 700; margin: 1rem 0 .5rem;
@@ -429,6 +436,14 @@ details.topic .topic-summary { cursor: pointer; }
 .sub li::before { content: "▹"; position: absolute; left: 0; color: var(--orange); }
 .sub p { font-size: var(--text-sm); color: var(--ink-soft); }
 .sub-links { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1rem; }
+.btn {
+  font-size: var(--text-xs); padding: .45rem .85rem; border-radius: 8px;
+  background: var(--ink); color: var(--white); display: inline-flex; align-items: center; gap: .4rem;
+  transition: background .2s ease, transform .2s ease;
+}
+.btn:hover { background: var(--orange-deep); transform: translateY(-1px); color: var(--on-orange); }
+.btn.ghost { background: transparent; color: var(--ink-soft); border: 1px solid var(--line-strong); }
+.btn.ghost:hover { border-color: var(--orange); color: var(--orange-deep); background: var(--orange-tint); }
 /* Image column for subproject */
 .sub-photos { display: flex; flex-direction: column; gap: .85rem; position: sticky; top: 100px; }
 .photo-slot {
@@ -459,7 +474,7 @@ details.topic .topic-summary { cursor: pointer; }
   border: 1px solid var(--orange-soft);
   border-left: 3px solid var(--orange);
   border-radius: var(--radius);
-  background: linear-gradient(180deg, rgba(255,122,26,0.04), rgba(255,122,26,0.01));
+  background: linear-gradient(180deg, rgba(37,99,235,0.04), rgba(37,99,235,0.01));
   padding: 1.1rem 1.15rem;
 }
 .doc-note-icon { color: var(--orange); font-size: 1.1rem; line-height: 1; }
@@ -473,3 +488,7 @@ details.topic .topic-summary { cursor: pointer; }
 .sub-photos .photo-slot { flex: 1; }
 .sub-photos .media-slot { flex: 1 1 240px; }
 .sub-photos { flex-direction: column; }
+.sub li::before { color: var(--ink-faint); }
+.interlatent-media { position: static; gap: .85rem; }
+.interlatent-diagrams { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+.interlatent-media video { background: #111; object-fit: contain; }
